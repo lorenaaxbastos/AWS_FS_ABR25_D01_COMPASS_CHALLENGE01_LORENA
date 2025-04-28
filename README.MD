@@ -58,9 +58,9 @@ Um site responsivo e interativo de uma cafeteria, desenvolvido utilizando apenas
 
 ## 🛠️ Tecnologias Utilizadas
 
-<span style="display: inline-block; font-weight: 600; color: #f3f4f6; background-color: #ee683a; padding:4px 8px; border-radius: 6px; font-size: 14px;margin-right:4px;">HTML5</span>
-<span style="display: inline-block; font-weight: 600; color: #f3f4f6; background-color: #0d88c2; padding:4px 8px; border-radius: 6px; font-size: 14px;margin-right:4px;">CSS3</span>
-<span style="display: inline-block; font-weight: 600; color: #f3f4f6; background-color: #eeb735; padding:4px 8px; border-radius: 6px; font-size: 14px;margin-right:4px;">JavaScript (ES6+)</span>
+![HTML5](https://img.shields.io/badge/HTML5-ee683a?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-0d88c2?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](<https://img.shields.io/badge/JavaScript%20(ES6%2B)-eeb735?style=for-the-badge&logo=javascript&logoColor=black>)
 
 ---
 
