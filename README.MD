@@ -1,6 +1,6 @@
 # Coffee Shop - Desafio 01 - Programa de Bolsas da compass UOL
 
-Um site responsivo e interativo de uma cafeteria, desenvolvido utilizando apenas **HTML**, **CSS** e **JavaScript puro**. O projeto segue um protótipo do Figma e implementa funcionalidades como renderização dinâmica de conteúdo, sistema de filtros, validação de formulário e carrossel de feedbacks. Nenhum framework externo foi utilizado.
+Um site responsivo e interativo de uma cafeteria, desenvolvido utilizando apenas **HTML**, **CSS** e **JavaScript puro**. O projeto foi além do protótipo original do Figma, incorporando práticas modernas como carregamento dinâmico de conteúdo, Web Components e arquitetura modularizada. Nenhum framework externo foi utilizado.
 
 ---
 
@@ -14,6 +14,9 @@ Um site responsivo e interativo de uma cafeteria, desenvolvido utilizando apenas
 -   Efeitos visuais ao passar o mouse nos botões
 -   Spinner de carregamento durante requisições
 -   Layout responsivo para diferentes tamanhos de tela
+-   Renderização dinâmica de layouts e páginas utilizando fetch() de parciais HTML e CSS
+-   Componentização usando Web Components para reutilização de estruturas
+-   Organização modular dos utilitários e componentes
 
 ---
 
@@ -21,37 +24,96 @@ Um site responsivo e interativo de uma cafeteria, desenvolvido utilizando apenas
 
 ```
 └── 📁src
+    └── 📁components
+        └── BaseComponent.js
+        └── components.js
+        └── 📁layout
+            └── 📁footer
+                └── Footer.css
+                └── Footer.html
+                └── Footer.js
+            └── 📁header
+                └── Header.css
+                └── Header.html
+                └── Header.js
+            └── 📁nav
+                └── Nav.css
+                └── Nav.html
+                └── Nav.js
+        └── 📁sections
+            └── 📁about-section
+                └── AboutSection.css
+                └── AboutSection.html
+                └── AboutSection.js
+            └── 📁cta-section
+                └── CtaSection.css
+                └── CtaSection.html
+                └── CtaSection.js
+            └── 📁hero-section
+                └── HeroSection.css
+                └── HeroSection.html
+                └── HeroSection.js
+            └── 📁menu-section
+                └── MenuSection.css
+                └── MenuSection.html
+                └── MenuSection.js
+            └── 📁subscription-section
+                └── SubscriptionSection.css
+                └── SubscriptionSection.html
+                └── SubscriptionSection.js
+            └── 📁testimonials-section
+                └── TestimonialsSection.css
+                └── TestimonialsSection.html
+                └── TestimonialsSection.js
+        └── 📁ui
+            └── 📁button
+                └── Button.css
+                └── Button.html
+                └── Button.js
+            └── 📁menu
+                └── Menu.css
+                └── Menu.html
+                └── Menu.js
+            └── 📁subscription-form
+                └── SubscriptionForm.css
+                └── SubscriptionForm.html
+                └── SubscriptionForm.js
+            └── 📁testimonials
+                └── TestimonialsCard.css
+                └── TestimonialsCard.html
+                └── TestimonialsCard.js
+                └── TestimonialsSlider.css
+                └── TestimonialsSlider.html
+                └── TestimonialsSlider.js
     └── 📁configs
         └── .prettierrc
     └── 📁data
         └── all-items.json
         └── feedbacks.json
-    └── 📁imgs
+    └── 📁layouts
+        └── main-layout.html
+    └── 📁pages
+        └── home.html
     └── 📁scripts
         └── index.js
-    └── 📁styles
-        └── 📁abstracts
-            └── _variables.css
-        └── 📁base
-            └── _animations.css
-            └── _base.css
-            └── _typography.css
-            └── _utilities.css
-        └── 📁components
-            └── _button.css
-            └── _subform.css
-            └── _table.css
-            └── _testimonial.css
-        └── index.css
-        └── 📁layouts
-            └── _footer.css
-            └── _header.css
-            └── _navigation.css
-            └── _slider.css
-        └── 📁pages
-            └── _home.css
-    └── index.html
-    └── README.MD
+    └── 📁shared
+        └── 📁spinner
+            └── Spinner.css
+            └── Spinner.html
+            └── Spinner.js
+        └── 📁styles
+            └── 📁abstracts
+                └── _variables.css
+            └── 📁base
+                └── _animations.css
+                └── _reset.css
+                └── _typography.css
+                └── _utilities.css
+            └── index.css
+    └── 📁utils
+        └── loader.js
+└── index.html
+└── README.MD
 ```
 
 ---

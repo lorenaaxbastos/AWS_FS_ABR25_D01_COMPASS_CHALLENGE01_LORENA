@@ -1,0 +1,29 @@
+/* REVIEW - Basic style */
+.spinner {
+    opacity: 0;
+    visibility: hidden;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.5s linear infinite;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.spinner.visible {
+    visibility: visible;
+}
+
+.spinner.active {
+    opacity: 1;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

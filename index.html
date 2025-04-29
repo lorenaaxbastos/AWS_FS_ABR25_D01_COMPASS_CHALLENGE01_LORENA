@@ -4,18 +4,20 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Clicker+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-            rel="stylesheet"
-        />
-
-        <link rel="stylesheet" href="styles/index.css" />
+        <link rel="stylesheet" href="src/shared/styles/index.css" />
 
         <title>Bean Scene - Coffee Shop</title>
     </head>
     <body>
-        <script src="scripts/index.js"></script>
+        <div
+            class="spinner"
+            role="status"
+            aria-live="assertive"
+            aria-label="Carregando..."
+        >
+            <span class="visually-hidden">Carregando...</span>
+        </div>
+        <div id="app"></div>
+        <script type="module" src="./src/scripts/index.js"></script>
     </body>
 </html>
