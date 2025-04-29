@@ -5,5 +5,6 @@ export const loadPartial = async (path) => {
         throw new Error(`Erro ao carregar o arquivo: ${path}`);
     }
 
-    return await response.text();
+    const isJson = path.endsWith(".json");
+    return isJson ? await response.json() : await response.text();
 };

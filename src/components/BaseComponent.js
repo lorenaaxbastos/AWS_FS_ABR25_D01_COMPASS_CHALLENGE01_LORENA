@@ -1,4 +1,5 @@
 import { loadPartial } from "../utils/loader.js";
+import { globalCssLoader } from "../utils/globalCssLoader.js";
 
 export class BaseComponent extends HTMLElement {
     constructor() {
@@ -12,25 +13,21 @@ export class BaseComponent extends HTMLElement {
     }
 
     async loadComponent() {
-        const basePath = this.constructor.componentFolder;
-        const baseName = basePath
-            .split("/")
-            .pop()
-            .split("-")
-            .map((str) => str[0].toUpperCase() + str.slice(1, str.length))
-            .join("");
+        const { componentFolder, componentName } = this.constructor;
+        const path = `${componentFolder}/${componentName}`;
 
-        const htmlPath = `${basePath}/${baseName}.html`;
-        const cssPath = `${basePath}/${baseName}.css`;
+        const [html, css] = await Promise.all([
+            loadPartial(`${path}.html`),
+            loadPartial(`${path}.css`),
+        ]);
+        const globalCss = await globalCssLoader();
 
-        const html = await loadPartial(htmlPath);
-        const style = await loadPartial(cssPath);
-
-        this.shadowRoot.innerHTML = `
-            <style>${style}</style>
-            ${html}
-        `;
+        this.shadowRoot.innerHTML = `<style>${globalCss}</style>
+        <style>${css}</style>
+        ${html}`;
     }
 
     setupAttributes() {}
 }
+
+customElements.define("base-component", BaseComponent);

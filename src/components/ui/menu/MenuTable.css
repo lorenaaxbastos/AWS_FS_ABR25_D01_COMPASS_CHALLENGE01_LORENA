@@ -1,0 +1,114 @@
+.menu-table__filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 1.6rem;
+}
+
+.menu-table__scroll-wrapper {
+    height: 58rem;
+    overflow-y: scroll;
+    border: 1px solid var(--color-secondary-rgba-42);
+    border-radius: 1rem;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.menu-table__scroll-wrapper::-webkit-scrollbar {
+    width: 1rem;
+}
+
+.menu-table__scroll-wrapper::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 1rem;
+}
+
+.menu-table__scroll-wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary-dark-rgba-22);
+    border-radius: 1rem;
+}
+
+.menu-table__table {
+    width: 100%;
+    font-size: 2.2rem;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.menu-table__head {
+    font-weight: 700;
+    color: var(--color-primary);
+    background-color: var(--color-secondary-light-02);
+}
+
+.menu-table__body {
+    color: var(--color-primary-light-02);
+}
+
+.menu-table__cell {
+    width: calc(100% / 3);
+    padding: 1.5rem 4rem;
+}
+
+.menu-table__row:not(:first-child) .menu-table__cell {
+    border: 1px solid var(--color-primary-dark-rgba-42);
+    border-left: none;
+    border-right: none;
+}
+
+.menu-table__row:last-child .menu-table__cell {
+    border-bottom: none;
+}
+
+@media (max-width: 64em) {
+    .menu-table__filter-tags {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 48.75em) {
+    .menu-table__filter-tags {
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+        justify-content: flex-start;
+    }
+
+    .menu-table__filter-tags > * {
+        flex-shrink: 0;
+    }
+
+    .menu-table__filter-tags::-webkit-scrollbar {
+        height: 1rem;
+    }
+
+    .menu-table__filter-tags::-webkit-scrollbar-track {
+        border-radius: 1rem;
+    }
+
+    .menu-table__filter-tags::-webkit-scrollbar-thumb {
+        background-color: var(--color-primary-dark-rgba-22);
+        border-radius: 1rem;
+    }
+}
+
+@media (max-width: 37.5em) {
+    .menu-table__cell:nth-child(2) {
+        display: none;
+    }
+
+    .menu-table__cell {
+        width: fit-content;
+        min-width: 10rem;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 27em) {
+    .menu-table__scroll-wrapper {
+        height: 34rem;
+    }
+
+    .menu-table__table {
+        font-size: 1.8rem;
+    }
+}
