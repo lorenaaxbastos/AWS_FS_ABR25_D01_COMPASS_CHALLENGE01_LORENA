@@ -3,8 +3,8 @@ import "../components/ui/menu/MenuCard.js";
 import "../components/ui/menu/MenuCards.js";
 import "../components/ui/menu/MenuTable.js";
 import "../components/ui/subscription-form/SubscriptionForm.js";
-import "../components/ui/testimonials/TestimonialsCard.js";
-import "../components/ui/testimonials/TestimonialsSlider.js";
+import "../components/ui/testimonial/TestimonialCard.js";
+import "../components/ui/slider/Slider.js";
 
 import "../components/layout/header/Header.js";
 import "../components/layout/nav/Nav.js";

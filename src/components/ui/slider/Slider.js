@@ -1,0 +1,90 @@
+import { BaseComponent } from "../../BaseComponent.js";
+import { loadPartial } from "../../../utils/loader.js";
+
+class Slider extends BaseComponent {
+    static componentFolder = "./src/components/ui/slider";
+    static componentName = "Slider";
+
+    async setupAttributes() {
+        const data = await loadPartial(this.getAttribute("data"));
+        const container = this.shadowRoot.querySelector(".slides");
+        const buttons = this.shadowRoot.querySelectorAll(".slider__btn");
+
+        const cardElements = [];
+
+        const recalculateHeight = () => {
+            const maxHeight = Math.max(
+                ...cardElements.map((slide) => slide.clientHeight)
+            );
+            container.style.height = `${maxHeight + 55}px`;
+        };
+
+        if (this.getAttribute("type") === "testimonial") {
+            const promises = data.data.map((feedback) => {
+                return new Promise((resolve) => {
+                    const slide = document.createElement("ui-testimonial-card");
+
+                    slide.setAttribute("author", feedback.full_name);
+                    slide.setAttribute("job", feedback.profession);
+                    slide.setAttribute("photo", feedback.image_url);
+                    slide.setAttribute("feedback", feedback.message);
+
+                    slide.addEventListener("card-ready", () => {
+                        cardElements.push(slide);
+                        resolve();
+                    });
+
+                    container.appendChild(slide);
+                });
+            });
+
+            await Promise.all(promises);
+            recalculateHeight();
+        }
+
+        window.addEventListener("resize", () => {
+            recalculateHeight();
+        });
+
+        const slides = container.childNodes;
+
+        let currentSlide = 0;
+
+        if (this.getAttribute("effect") === "fade") {
+            slides.forEach((slide) => (slide.style.opacity = 0));
+        }
+
+        const goToSlide = (index) => {
+            slides.forEach((slide, i) => {
+                if (this.getAttribute("effect") === "slide") {
+                    slide.style.transform = `translateX(${(i - index) * 100}%)`;
+                } else if (this.getAttribute("effect") === "fade") {
+                    slide.classList.toggle("active", i === index);
+                }
+            });
+        };
+
+        const updateButtons = () => {
+            buttons[0].disabled = currentSlide === 0;
+            buttons[1].disabled = currentSlide === slides.length - 1;
+        };
+
+        goToSlide(currentSlide);
+        updateButtons();
+
+        buttons.forEach((button, j) => {
+            button.addEventListener("click", () => {
+                button.blur();
+
+                const maxIndex = slides.length - 1;
+                if (j === 0 && currentSlide > 0) currentSlide--;
+                if (j === 1 && currentSlide < maxIndex) currentSlide++;
+
+                goToSlide(currentSlide);
+                updateButtons();
+            });
+        });
+    }
+}
+
+customElements.define("ui-slider", Slider);

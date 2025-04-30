@@ -1,13 +1,16 @@
 :root {
     --color-white: #fff;
     --color-black: #000;
+    --color-black-rgba-34: rgb(0, 0, 0, 0.34);
     --color-grey-dark: #1e1e1e;
+    --color-grey: #707070;
     --color-primary-dark: #442808;
     --color-primary-dark-rgba-42: rgba(68, 40, 8, 0.42);
     --color-primary-dark-rgba-22: rgba(68, 40, 8, 0.22);
     --color-primary: #603809;
     --color-primary-light-01: #aa8558;
     --color-primary-light-02: #968162;
+    --color-secondary-dark: #ffad3b;
     --color-secondary: #f9c06a;
     --color-secondary-rgba-42: rgba(249, 192, 106, 0.42);
     --color-secondary-rgba-22: rgba(249, 192, 106, 0.22);
