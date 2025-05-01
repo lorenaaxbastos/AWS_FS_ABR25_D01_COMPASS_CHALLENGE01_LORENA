@@ -2,7 +2,9 @@ import { BaseComponent } from "../../BaseComponent.js";
 import { loadPartial } from "../../../utils/loader.js";
 
 class Slider extends BaseComponent {
-    static componentFolder = "./src/components/ui/slider";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "Slider";
 
     async setupAttributes() {

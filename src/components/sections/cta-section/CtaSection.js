@@ -1,7 +1,9 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class CtaSection extends BaseComponent {
-    static componentFolder = "./src/components/sections/cta-section";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "CtaSection";
 
     setupAttributes() {}

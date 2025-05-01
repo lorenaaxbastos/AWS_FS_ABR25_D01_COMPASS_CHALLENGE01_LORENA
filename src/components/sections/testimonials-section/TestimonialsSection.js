@@ -1,7 +1,9 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class TestimonialsSection extends BaseComponent {
-    static componentFolder = "./src/components/sections/testimonials-section";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "TestimonialsSection";
 
     setupAttributes() {}

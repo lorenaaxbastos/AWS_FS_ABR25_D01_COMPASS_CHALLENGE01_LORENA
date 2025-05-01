@@ -1,7 +1,9 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class Header extends BaseComponent {
-    static componentFolder = "./src/components/layout/header";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "Header";
 
     setupAttributes() {}

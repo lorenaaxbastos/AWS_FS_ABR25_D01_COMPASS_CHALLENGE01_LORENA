@@ -1,7 +1,9 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class Button extends BaseComponent {
-    static componentFolder = "./src/components/ui/button";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "Button";
 
     setupAttributes() {

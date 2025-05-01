@@ -2,7 +2,9 @@ import { BaseComponent } from "../../BaseComponent.js";
 import { loadPartial } from "../../../utils/loader.js";
 
 class MenuCards extends BaseComponent {
-    static componentFolder = "./src/components/ui/menu";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "MenuCards";
 
     async setupAttributes() {

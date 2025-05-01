@@ -1,7 +1,9 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class SubscriptionForm extends BaseComponent {
-    static componentFolder = "./src/components/ui/subscription-form";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "SubscriptionForm";
 
     setupAttributes() {

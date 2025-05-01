@@ -1,7 +1,9 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class Nav extends BaseComponent {
-    static componentFolder = "./src/components/layout/nav";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "Nav";
 
     setupAttributes() {}

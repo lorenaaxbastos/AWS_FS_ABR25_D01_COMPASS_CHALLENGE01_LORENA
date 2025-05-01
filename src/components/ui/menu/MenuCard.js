@@ -1,7 +1,9 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class MenuCard extends BaseComponent {
-    static componentFolder = "./src/components/ui/menu";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "MenuCard";
 
     setupAttributes() {

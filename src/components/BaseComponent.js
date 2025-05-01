@@ -2,9 +2,10 @@ import { loadPartial } from "../utils/loader.js";
 import { globalCssLoader } from "../utils/globalCssLoader.js";
 
 export class BaseComponent extends HTMLElement {
-    constructor() {
+    constructor(metaUrl) {
         super();
         this.attachShadow({ mode: "open" });
+        this.componentFolder = new URL(".", metaUrl).href;
     }
 
     async connectedCallback() {
@@ -13,8 +14,8 @@ export class BaseComponent extends HTMLElement {
     }
 
     async loadComponent() {
-        const { componentFolder, componentName } = this.constructor;
-        const path = `${componentFolder}/${componentName}`;
+        const componentName = this.constructor.componentName;
+        const path = `${this.componentFolder}${componentName}`;
 
         const [html, css] = await Promise.all([
             loadPartial(`${path}.html`),

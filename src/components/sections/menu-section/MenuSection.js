@@ -1,7 +1,9 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class MenuSection extends BaseComponent {
-    static componentFolder = "./src/components/sections/menu-section";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "MenuSection";
 
     setupAttributes() {}

@@ -1,7 +1,9 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class HeroSection extends BaseComponent {
-    static componentFolder = "./src/components/sections/hero-section";
+    constructor() {
+        super(import.meta.url);
+    }
     static componentName = "HeroSection";
 
     setupAttributes() {}
