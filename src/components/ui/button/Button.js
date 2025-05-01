@@ -17,7 +17,15 @@ class Button extends BaseComponent {
         other.remove();
 
         const label = this.getAttribute("label") || "Order Now";
-        const size = this.getAttribute("size");
+        element.innerText = label;
+
+        const size = this.getAttribute("size") || "large";
+        const fontSizeMap = {
+            small: "1.4rem",
+            medium: "1.5rem",
+            large: "1.6rem",
+        };
+        element.style.fontSize = fontSizeMap[size] || fontSizeMap["large"];
 
         const excludedAttrs = [
             "label",
@@ -32,23 +40,11 @@ class Button extends BaseComponent {
             }
         }
 
-        element.innerText = label;
-
-        const fontSizeMap = {
-            small: "1.4rem",
-            medium: "1.5rem",
-            large: "1.6rem",
-        };
-
-        element.style.fontSize = fontSizeMap[size] || fontSizeMap["large"];
-
-        const attributeClasses = ["shadow-on", "outline"];
-        attributeClasses.forEach((attr) => {
+        ["shadow-on", "outline"].forEach((attr) => {
             if (this.hasAttribute(attr)) {
                 element.classList.add(attr);
             }
         });
-
         if (
             this.hasAttribute("on-hover") &&
             this.getAttribute("on-hover") === "animated"
@@ -62,18 +58,19 @@ class Button extends BaseComponent {
 
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
-                if (mutation.type === "attributes") {
-                    if (mutation.attributeName === "outline") {
-                        const internalButton = this.shadowRoot.querySelector(
-                            '[data-role="button"]'
-                        );
-                        if (this.hasAttribute("outline")) {
-                            internalButton.classList.add("outline");
-                            internalButton.classList.remove("active");
-                        } else {
-                            internalButton.classList.remove("outline");
-                            internalButton.classList.add("active");
-                        }
+                if (
+                    mutation.type === "attributes" &&
+                    mutation.attributeName === "outline"
+                ) {
+                    const internalButton = this.shadowRoot.querySelector(
+                        '[data-role="button"]'
+                    );
+                    if (this.hasAttribute("outline")) {
+                        internalButton.classList.add("outline");
+                        internalButton.classList.remove("active");
+                    } else {
+                        internalButton.classList.remove("outline");
+                        internalButton.classList.add("active");
                     }
                 }
             });

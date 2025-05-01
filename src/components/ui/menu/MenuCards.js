@@ -14,28 +14,22 @@ class MenuCards extends BaseComponent {
         const productIsNew = data.data.filter((product) => product.is_new);
 
         productIsNew.forEach(
-            ({ imagem_url, name, short_description, price }) => {
-                const priceFormatted = `R$ ${price.toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                })}`;
+            ({ imagem_url, name, short_description, price, order_url }) => {
+                if (name && price && order_url) {
+                    const menuCard = document.createElement("ui-menu-card");
+                    menuCard.setAttribute("product-img", imagem_url || "");
+                    menuCard.setAttribute("product-name", name);
+                    menuCard.setAttribute(
+                        "product-description",
+                        short_description
+                    );
+                    menuCard.setAttribute("product-price", price);
+                    menuCard.setAttribute("product-url", order_url);
 
-                const img = imagem_url ?? "./src/imgs/product-cappuccino.webp";
-
-                const menuCard = document.createElement("ui-menu-card");
-                menuCard.setAttribute("img-src", img);
-                menuCard.setAttribute("product-name", name);
-                menuCard.setAttribute("product-description", short_description);
-                menuCard.setAttribute("product-price", priceFormatted);
-
-                container.appendChild(menuCard);
+                    container.appendChild(menuCard);
+                }
             }
         );
-
-        const cards = this.shadowRoot.querySelectorAll("ui-menu-card");
-
-        // container.style.width =
-        //     cards.length === 1 ? "30%" : cards.length === 2 ? "50%" : "100%";
     }
 }
 

@@ -1,5 +1,6 @@
 import { BaseComponent } from "../../BaseComponent.js";
 import { loadPartial } from "../../../utils/loader.js";
+import { priceFormatBR, titleCase } from "../../../utils/format.js";
 
 class MenuTable extends BaseComponent {
     constructor() {
@@ -13,30 +14,33 @@ class MenuTable extends BaseComponent {
         let filterTags = ["All Items"];
         let tableContent = [];
 
-        data.data.forEach((item) => {
-            if (!filterTags.includes(item.type)) filterTags.push(item.type);
-
-            const price = `R$ ${item.price.toLocaleString("pt-BR", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-            })}`;
-
-            tableContent.push([item.name, item.type, price]);
+        (data?.data ?? []).forEach((product) => {
+            if (product.name && product.price) {
+                if (!filterTags.includes(product.type))
+                    filterTags.push(product.type);
+                tableContent.push({
+                    name: titleCase(product.name),
+                    type: titleCase(product.type),
+                    price: priceFormatBR(product.price),
+                });
+            }
         });
 
         const tbody = this.shadowRoot.querySelector(".menu-table__body");
-        const filterContainer = this.shadowRoot.querySelector(
+        const thead = this.shadowRoot.querySelector(".menu-table__head");
+        const filtersContainer = this.shadowRoot.querySelector(
             ".menu-table__filter-tags"
         );
 
-        tableContent.forEach((item) => {
+        tableContent.forEach((product) => {
             const tr = document.createElement("tr");
             tr.classList.add("menu-table__row");
 
-            item.forEach((text) => {
+            Object.keys(product).forEach((key) => {
                 const td = document.createElement("td");
                 td.classList.add("menu-table__cell");
-                td.textContent = text;
+                td.textContent = product[key];
+                td.dataset[key] = product[key];
                 tr.appendChild(td);
             });
 
@@ -44,10 +48,11 @@ class MenuTable extends BaseComponent {
         });
 
         if (filterTags.length <= 1) {
-            filterContainer.style.display = "none";
+            filtersContainer.style.display = "none";
             return;
         }
 
+        filtersContainer.innerHTML = "";
         filterTags.forEach((tag, index) => {
             const button = document.createElement("ui-button");
             button.setAttribute("label", tag);
@@ -60,30 +65,30 @@ class MenuTable extends BaseComponent {
                 button.setAttribute("outline", "");
             }
 
-            filterContainer.appendChild(button);
+            filtersContainer.appendChild(button);
         });
 
-        const buttons = filterContainer.querySelectorAll("ui-button");
+        const buttons = filtersContainer.querySelectorAll("ui-button");
 
-        buttons.forEach((button) => {
-            button.addEventListener("click", () => {
-                buttons.forEach((button) => {
-                    button.classList.remove("active");
-                    button.setAttribute("outline", "");
-                });
-                button.classList.add("active");
-                button.removeAttribute("outline");
+        filtersContainer.addEventListener("click", (event) => {
+            const btnSelected = event.target.closest("ui-button");
+            if (!btnSelected) return;
 
-                const selectedType = button.getAttribute("data-tag");
-                const rows = tbody.querySelectorAll("tr");
+            buttons.forEach((button) => {
+                button.classList.remove("active");
+                button.setAttribute("outline", "");
+            });
+            btnSelected.classList.add("active");
+            btnSelected.removeAttribute("outline");
 
-                rows.forEach((row) => {
-                    const typeCell = row.children[1];
-                    const isVisible =
-                        selectedType === "All Items" ||
-                        typeCell.textContent.trim() === selectedType;
-                    row.style.display = isVisible ? "" : "none";
-                });
+            const typeSelected = btnSelected.getAttribute("data-tag");
+            const rows = tbody.querySelectorAll("tr");
+
+            rows.forEach((row) => {
+                const typeCell = row.querySelector("[data-type]").textContent;
+                const isVisible =
+                    typeSelected === "All Items" || typeCell === typeSelected;
+                row.style.display = isVisible ? "" : "none";
             });
         });
     }

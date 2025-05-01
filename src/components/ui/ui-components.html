@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" href="../../shared/styles/index.css" />
+
+        <title>Components</title>
+    </head>
+    <body>
+        <h1>Components</h1>
+
+        <h2>Button</h2>
+        <ui-button data-role="button"></ui-button>
+        <ui-button data-role="link" href="#"></ui-button>
+
+        <h2>Menu</h2>
+        <ui-menu-card
+            product-name="Teste"
+            product-description="Lorem ipsum, dolor sit amet consectetur adipisicing elit."
+            product-price="r$ 15.5896"
+            product-url="#"
+        ></ui-menu-card>
+        <ui-menu-cards data="/src/data/all-items.json"></ui-menu-cards>
+        <ui-menu-table data="/src/data/all-items.json"></ui-menu-table>
+
+        <h2>Subscription Form</h2>
+        <ui-subscription-form></ui-subscription-form>
+
+        <h2>Testimonial</h2>
+        <ui-testimonial-card
+            author="Lorena bastos"
+            job="fULL-stack developer"
+            feedback="This was such a fun project! I learned so much while doing it."
+        ></ui-testimonial-card>
+
+        <h2>Slider</h2>
+        <ui-slider
+            type="testimonial"
+            data="/src/data/feedbacks.json"
+            effect="fade"
+        ></ui-slider>
+
+        <script type="module" src="../components.js"></script>
+    </body>
+</html>

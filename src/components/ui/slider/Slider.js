@@ -1,5 +1,6 @@
 import { BaseComponent } from "../../BaseComponent.js";
 import { loadPartial } from "../../../utils/loader.js";
+import { titleCase } from "../../../utils/format.js";
 
 class Slider extends BaseComponent {
     constructor() {
@@ -11,6 +12,13 @@ class Slider extends BaseComponent {
         const data = await loadPartial(this.getAttribute("data"));
         const container = this.shadowRoot.querySelector(".slides");
         const buttons = this.shadowRoot.querySelectorAll(".slider__btn");
+        const effect = this.getAttribute("effect");
+        const type = this.getAttribute("type");
+
+        container.setAttribute(
+            "aria-label",
+            titleCase(`${type} ${container.getAttribute("aria-label")}`)
+        );
 
         const cardElements = [];
 
@@ -21,7 +29,7 @@ class Slider extends BaseComponent {
             container.style.height = `${maxHeight + 55}px`;
         };
 
-        if (this.getAttribute("type") === "testimonial") {
+        if (type === "testimonial") {
             const promises = data.data.map((feedback) => {
                 return new Promise((resolve) => {
                     const slide = document.createElement("ui-testimonial-card");
@@ -30,6 +38,7 @@ class Slider extends BaseComponent {
                     slide.setAttribute("job", feedback.profession);
                     slide.setAttribute("photo", feedback.image_url);
                     slide.setAttribute("feedback", feedback.message);
+                    slide.setAttribute("tabindex", "-1");
 
                     slide.addEventListener("card-ready", () => {
                         cardElements.push(slide);
@@ -44,24 +53,31 @@ class Slider extends BaseComponent {
             recalculateHeight();
         }
 
+        let resizeTimeout;
         window.addEventListener("resize", () => {
-            recalculateHeight();
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => recalculateHeight(), 200);
         });
 
-        const slides = container.childNodes;
+        const slides = Array.from(container.children);
 
         let currentSlide = 0;
 
-        if (this.getAttribute("effect") === "fade") {
+        if (effect === "fade") {
             slides.forEach((slide) => (slide.style.opacity = 0));
         }
 
         const goToSlide = (index) => {
             slides.forEach((slide, i) => {
-                if (this.getAttribute("effect") === "slide") {
+                if (effect === "slide") {
                     slide.style.transform = `translateX(${(i - index) * 100}%)`;
-                } else if (this.getAttribute("effect") === "fade") {
+                } else if (effect === "fade") {
                     slide.classList.toggle("active", i === index);
+                }
+
+                slide.setAttribute("aria-hidden", i !== index);
+                if (i === index && this.shadowRoot.activeElement !== null) {
+                    slide.focus();
                 }
             });
         };
@@ -85,6 +101,23 @@ class Slider extends BaseComponent {
                 goToSlide(currentSlide);
                 updateButtons();
             });
+        });
+
+        this.shadowRoot.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowLeft") {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    goToSlide(currentSlide);
+                    updateButtons();
+                }
+            }
+            if (event.key === "ArrowRight") {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    goToSlide(currentSlide);
+                    updateButtons();
+                }
+            }
         });
     }
 }

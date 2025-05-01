@@ -8,6 +8,11 @@ class SubscriptionForm extends BaseComponent {
 
     setupAttributes() {
         const EMAIL_KEY = "subscribedEmail";
+        const SUBSCRIBE_TEXT = "Subscribe";
+        const CANCEL_TEXT = "Cancel subscription";
+        const SUCCESS_MESSAGE = "You're now subscribed!";
+        const ERROR_MESSAGE = "Oops! The email address you entered is invalid.";
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const isValidEmail = (email) => emailRegex.test(email);
 
@@ -18,10 +23,10 @@ class SubscriptionForm extends BaseComponent {
         btn.addEventListener("click", () => {
             btn.blur();
 
-            if (btn.textContent === "Cancel subscription") {
+            if (btn.classList.contains("subscribed")) {
                 localStorage.removeItem(EMAIL_KEY);
                 btn.classList.remove("subscribed");
-                btn.textContent = "Subscribe";
+                btn.textContent = SUBSCRIBE_TEXT;
                 input.disabled = false;
                 input.value = "";
                 return;
@@ -31,7 +36,7 @@ class SubscriptionForm extends BaseComponent {
 
             if (isValidEmail(email)) {
                 localStorage.setItem(EMAIL_KEY, email);
-                message.textContent = "You're now subscribed!";
+                message.textContent = SUCCESS_MESSAGE;
                 input.disabled = true;
 
                 setTimeout(() => {
@@ -39,11 +44,10 @@ class SubscriptionForm extends BaseComponent {
                 }, 1000);
 
                 setTimeout(() => {
-                    btn.textContent = "Cancel subscription";
+                    btn.textContent = CANCEL_TEXT;
                 }, 1200);
             } else {
-                message.textContent =
-                    "Oops! The email address you entered is invalid.";
+                message.textContent = ERROR_MESSAGE;
             }
 
             message.classList.remove("hidden");
@@ -54,7 +58,7 @@ class SubscriptionForm extends BaseComponent {
         if (savedEmail) {
             input.value = savedEmail;
             input.disabled = true;
-            btn.textContent = "Cancel subscription";
+            btn.textContent = CANCEL_TEXT;
             btn.classList.add("subscribed");
         }
     }

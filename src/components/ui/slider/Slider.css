@@ -82,6 +82,10 @@
     opacity: 1 !important;
 }
 
+.slides > *.active:focus-visible {
+    outline: none;
+}
+
 @media (max-width: 27em) {
     .slider {
         width: calc(100% - 6.5rem);

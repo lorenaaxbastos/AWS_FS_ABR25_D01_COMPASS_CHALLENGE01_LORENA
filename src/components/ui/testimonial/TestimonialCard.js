@@ -1,4 +1,5 @@
 import { BaseComponent } from "../../BaseComponent.js";
+import { titleCase } from "../../../utils/format.js";
 
 class TestimonialCard extends BaseComponent {
     constructor() {
@@ -16,10 +17,15 @@ class TestimonialCard extends BaseComponent {
 
         [author, job, feedback].forEach((el) => {
             const key = el.classList.value.split("__")[1];
-            el.textContent = this.getAttribute(key);
+            const value = this.getAttribute(key) ?? "";
+            el.textContent =
+                key === "author" || key === "job" ? titleCase(value) : value;
         });
 
-        photo.style.backgroundImage = `url(${this.getAttribute("photo")})`;
+        photo.style.backgroundImage = `url(${
+            this.getAttribute("photo") || "/src/imgs/default-testimonial.webp"
+        })`;
+        photo.setAttribute("aria-label", `Photo of ${author.textContent}`);
 
         requestAnimationFrame(() => {
             this.dispatchEvent(
