@@ -9,28 +9,115 @@ class MenuTable extends BaseComponent {
     static componentName = "MenuTable";
 
     async setupAttributes() {
-        const data = await loadPartial(this.getAttribute("data"));
+        const columnsAttr = this.getAttribute("columns");
 
         let filterTags = ["All Items"];
+        let columns = columnsAttr
+            ? JSON.parse(columnsAttr)
+            : ["name", "type", "price"];
+
+        const data = await loadPartial(this.getAttribute("data"));
         let tableContent = [];
 
         (data?.data ?? []).forEach((product) => {
             if (product.name && product.price) {
                 if (!filterTags.includes(product.type))
                     filterTags.push(product.type);
-                tableContent.push({
-                    name: titleCase(product.name),
-                    type: titleCase(product.type),
-                    price: priceFormatBR(product.price),
-                });
+
+                tableContent.push(
+                    columns.reduce((acc, key) => {
+                        let value = product[key];
+                        if (key === "price") value = priceFormatBR(value);
+                        else
+                            value =
+                                typeof value === "string"
+                                    ? titleCase(value)
+                                    : value;
+
+                        acc[key] = value;
+                        return acc;
+                    }, {})
+                );
             }
         });
 
+        const theadRow = this.shadowRoot.querySelector(
+            ".menu-table__head .menu-table__row"
+        );
         const tbody = this.shadowRoot.querySelector(".menu-table__body");
-        const thead = this.shadowRoot.querySelector(".menu-table__head");
         const filtersContainer = this.shadowRoot.querySelector(
             ".menu-table__filter-tags"
         );
+
+        const getRows = () => Array.from(tbody.querySelectorAll("tr"));
+
+        const sortRowsByColumn = (rows, index, desc = false) => {
+            return rows.sort((a, b) => {
+                const valA = a.children[index].textContent.toUpperCase();
+                const valB = b.children[index].textContent.toUpperCase();
+
+                if (valA < valB) return desc ? 1 : -1;
+                if (valA > valB) return desc ? -1 : 1;
+                return 0;
+            });
+        };
+
+        theadRow.innerHTML = "";
+
+        columns.forEach((col, index) => {
+            const th = document.createElement("th");
+            th.classList.add("menu-table__cell");
+            th.dataset.columnIndex = index;
+            th.setAttribute("role", "columnheader");
+            th.setAttribute("scope", "col");
+
+            const div = document.createElement("div");
+            div.classList.add("menu-table__head-cell-content");
+
+            const spanText = document.createElement("span");
+            spanText.classList.add("menu-table__head-text");
+            spanText.textContent = titleCase(col.split("_").join(" "));
+
+            const icon = document.createElement("span");
+            icon.classList.add("menu-table__order-icon");
+            icon.innerHTML = "&#9650;";
+
+            if (index === 0) icon.classList.add("active");
+
+            div.appendChild(spanText);
+            div.appendChild(icon);
+            th.appendChild(div);
+            theadRow.appendChild(th);
+
+            div.addEventListener("click", () => {
+                const selectedIcon = div.querySelector(
+                    ".menu-table__order-icon"
+                );
+
+                theadRow
+                    .querySelectorAll(".menu-table__head-cell-content")
+                    .forEach((otherDiv) => {
+                        const otherIcon = otherDiv.querySelector(
+                            ".menu-table__order-icon"
+                        );
+                        if (otherDiv !== div) {
+                            otherIcon.classList.remove(
+                                "active",
+                                "active--desc"
+                            );
+                        }
+                    });
+
+                selectedIcon.classList.add("active");
+                selectedIcon.classList.toggle("active--desc");
+
+                const desc = selectedIcon.classList.contains("active--desc");
+                th.setAttribute("aria-sort", desc ? "descending" : "ascending");
+
+                const sortedRows = sortRowsByColumn(getRows(), index, desc);
+                sortedRows.forEach((row) => tbody.appendChild(row));
+            });
+        });
 
         tableContent.forEach((product) => {
             const tr = document.createElement("tr");
@@ -46,6 +133,9 @@ class MenuTable extends BaseComponent {
 
             tbody.appendChild(tr);
         });
+
+        const sortedRows = sortRowsByColumn(getRows(), 0);
+        sortedRows.forEach((row) => tbody.appendChild(row));
 
         if (filterTags.length <= 1) {
             filtersContainer.style.display = "none";
@@ -77,14 +167,15 @@ class MenuTable extends BaseComponent {
             buttons.forEach((button) => {
                 button.classList.remove("active");
                 button.setAttribute("outline", "");
+                button.setAttribute("aria-pressed", "false");
             });
             btnSelected.classList.add("active");
             btnSelected.removeAttribute("outline");
+            btnSelected.setAttribute("aria-pressed", "true");
 
             const typeSelected = btnSelected.getAttribute("data-tag");
-            const rows = tbody.querySelectorAll("tr");
 
-            rows.forEach((row) => {
+            getRows().forEach((row) => {
                 const typeCell = row.querySelector("[data-type]").textContent;
                 const isVisible =
                     typeSelected === "All Items" || typeCell === typeSelected;
