@@ -11,9 +11,10 @@
     border-radius: 2.4rem;
     font-family: inherit;
     font-weight: 700;
+    line-height: 1;
     color: var(--color-grey-dark);
     background-color: var(--color-secondary);
-    transition: all 0.3s cubic-bezier(0.56, -0.3, 0.22, 0.85);
+    transition: var(--transition-default);
 }
 
 .btn:hover {
@@ -57,12 +58,35 @@
 
 .btn.active {
     color: var(--color-primary);
-    /* pointer-events: none; */
 }
 
 .btn.active:hover {
     color: var(--color-primary);
     background-color: var(--color-secondary);
+}
+
+:host-context(.header) .btn:hover {
+    color: var(--color-primary);
+    background-color: var(--color-secondary-light-02);
+    box-shadow: 0 0.3rem 0.6rem var(--color-secondary-rgba-42);
+}
+
+:host-context(.header.scroll) .btn:hover {
+    color: var(--color-secondary-light-02);
+    background-color: var(--color-primary-dark);
+    box-shadow: 0 0.6rem 1.2rem var(--color-primary-dark-rgba-22);
+}
+
+:host-context(.header:not([transparent])) .btn:hover {
+    color: var(--color-secondary-light-02);
+    background-color: var(--color-primary-dark);
+    box-shadow: 0 0.6rem 1.2rem var(--color-primary-dark-rgba-22);
+}
+
+:host-context(.header:not([transparent])) .btn:hover {
+    color: var(--color-primary);
+    background-color: var(--color-secondary-light-02);
+    box-shadow: 0 0.3rem 0.6rem var(--color-secondary-rgba-42);
 }
 
 @media (max-width: 64em) {

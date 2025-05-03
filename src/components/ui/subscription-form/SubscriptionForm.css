@@ -2,7 +2,7 @@
     min-height: 6.6rem;
     max-width: 65.5rem;
     transform-origin: center left;
-    transition: all 0.2s cubic-bezier(0.56, -0.3, 0.22, 0.85);
+    transition: var(--transition-default);
 }
 
 .subscription__form {
@@ -21,7 +21,7 @@
     font-size: 2rem;
     line-height: 3.4rem;
     color: var(--color-grey);
-    transition: all 0.3s cubic-bezier(0.56, -0.3, 0.22, 0.85);
+    transition: var(--transition-default);
 }
 
 .subscription__input::placeholder {
@@ -40,7 +40,7 @@
     border-top-right-radius: 0.4rem;
     border-bottom-right-radius: 0.4rem;
     box-shadow: 0 0.6rem 1.2rem var(--color-secondary-rgba-22);
-    transition: all 0.3s cubic-bezier(0.56, -0.3, 0.22, 0.85);
+    transition: var(--transition-default);
 }
 
 .subscription__message {
@@ -52,7 +52,7 @@
     color: var(--color-secondary-dark);
     opacity: 1;
     visibility: visible;
-    transition: all 0.3s cubic-bezier(0.56, -0.3, 0.22, 0.85);
+    transition: var(--transition-default);
 }
 
 .subscription__message.hidden {

@@ -10,14 +10,14 @@ class MenuCard extends BaseComponent {
 
     setupAttributes() {
         const name = this.shadowRoot.querySelector(".menu-card__name");
-        const description = this.shadowRoot.querySelector(
-            ".menu-card__description"
+        const ingredients = this.shadowRoot.querySelector(
+            ".menu-card__ingredients"
         );
         const price = this.shadowRoot.querySelector(".menu-card__price");
         const img = this.shadowRoot.querySelector(".menu-card__img");
         const button = this.shadowRoot.querySelector("ui-button");
 
-        [name, description, price].forEach((el) => {
+        [name, ingredients, price].forEach((el) => {
             const key = el.classList.value.split("__")[1];
             const value = this.getAttribute(`product-${key}`);
 

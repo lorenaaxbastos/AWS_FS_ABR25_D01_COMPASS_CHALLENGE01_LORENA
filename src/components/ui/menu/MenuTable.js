@@ -147,7 +147,8 @@ class MenuTable extends BaseComponent {
             const button = document.createElement("ui-button");
             button.setAttribute("label", tag);
             button.setAttribute("data-tag", tag);
-            button.setAttribute("size", "small");
+            button.setAttribute("data-role", "button");
+            button.setAttribute("size", "medium");
 
             if (index === 0) {
                 button.classList.add("active");

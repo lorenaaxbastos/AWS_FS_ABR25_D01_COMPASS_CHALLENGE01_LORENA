@@ -52,7 +52,7 @@
             "id": 4,
             "name": "Cold Brew Coconut",
             "type": "Cold Beverage",
-            "price": 3.9,
+            "price": "3.9",
             "short_description": "Cold brewed coffee infused with coconut water",
             "is_new": true,
             "order_url": "#",

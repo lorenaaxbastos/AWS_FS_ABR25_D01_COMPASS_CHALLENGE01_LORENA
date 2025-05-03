@@ -8,42 +8,72 @@
 
         <title>Components</title>
     </head>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            gap: 8rem;
+            max-width: var(--site-max-width);
+            padding: 5rem;
+        }
+
+        h2 {
+            margin-bottom: 2rem;
+        }
+
+        section > *:not(h2, :last-child) {
+            display: block;
+            margin-bottom: 8rem;
+        }
+    </style>
     <body>
         <h1>Components</h1>
 
-        <h2>Button</h2>
-        <ui-button data-role="button"></ui-button>
-        <ui-button data-role="link" href="#"></ui-button>
+        <section>
+            <h2>Button</h2>
+            <div>
+                <ui-button data-role="button"></ui-button>
+                <ui-button data-role="link"></ui-button>
+            </div>
+        </section>
 
-        <h2>Menu</h2>
-        <ui-menu-card
-            product-name="Teste"
-            product-description="Lorem ipsum, dolor sit amet consectetur adipisicing elit."
-            product-price="r$ 15.5896"
-            product-url="#"
-        ></ui-menu-card>
-        <ui-menu-cards data="/src/data/all-items.json"></ui-menu-cards>
-        <ui-menu-table
-            data="/src/data/all-items.json"
-            columns='["name","type", "price"]'
-        ></ui-menu-table>
+        <section>
+            <h2>Menu</h2>
+            <ui-menu-card
+                product-name="Teste"
+                product-description="Lorem ipsum, dolor sit amet consectetur adipisicing elit."
+                product-price="r$ 15,587,596"
+                product-url="#"
+            ></ui-menu-card>
+            <ui-menu-cards data="/src/data/all-items.json"></ui-menu-cards>
+            <ui-menu-table
+                data="/src/data/all-items.json"
+                columns='["name", "type", "price"]'
+            ></ui-menu-table>
+        </section>
 
-        <h2>Subscription Form</h2>
-        <ui-subscription-form></ui-subscription-form>
+        <section>
+            <h2>Subscription Form</h2>
+            <ui-subscription-form></ui-subscription-form>
+        </section>
 
-        <h2>Testimonial</h2>
-        <ui-testimonial-card
-            author="Lorena bastos"
-            job="fULL-stack developer"
-            feedback="This was such a fun project! I learned so much while doing it."
-        ></ui-testimonial-card>
+        <section>
+            <h2>Testimonial</h2>
+            <ui-testimonial-card
+                author="Lorena bastos"
+                job="fULL-stack developer"
+                feedback="This was such a fun project! I learned so much while doing it."
+            ></ui-testimonial-card>
+        </section>
 
-        <h2>Slider</h2>
-        <ui-slider
-            type="testimonial"
-            data="/src/data/feedbacks.json"
-            effect="fade"
-        ></ui-slider>
+        <section>
+            <h2>Slider</h2>
+            <ui-slider
+                type="testimonial"
+                data="/src/data/feedbacks.json"
+                effect="slide"
+            ></ui-slider>
+        </section>
 
         <script type="module" src="../components.js"></script>
     </body>

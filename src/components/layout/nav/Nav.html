@@ -1,0 +1,34 @@
+<style>
+    @media (max-width: 48em) {
+        ui-button {
+            opacity: 0;
+            pointer-events: none;
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%) scale(1.5);
+            transition: var(--transition-menu);
+        }
+
+        .nav--mobile .nav__list + ui-button {
+            opacity: 1;
+            pointer-events: auto;
+            text-align: center;
+        }
+    }
+</style>
+<nav class="nav">
+    <div class="nav__icon">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <ul class="nav__list"></ul>
+    <ui-button
+        data-role="link"
+        href="#"
+        on-hover="animated"
+        shadow-on
+    ></ui-button>
+</nav>
+<div class="overlay"></div>

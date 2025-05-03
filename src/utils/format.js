@@ -8,6 +8,7 @@ export const titleCase = (str) => {
         .join(" ");
 };
 
+// FIX
 export const priceFormatBR = (value) => {
     if (typeof value !== "string" && typeof value !== "number") return "";
 
