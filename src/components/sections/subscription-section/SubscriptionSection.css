@@ -5,7 +5,6 @@
     background-size: cover;
     background-position: center;
     position: relative;
-    z-index: -2;
 }
 
 .section-subscription__content {
@@ -18,7 +17,9 @@
 }
 
 .section-subscription__form {
+    position: relative;
     max-width: 65.5rem;
+    z-index: 1;
 }
 
 .section-subscription__img {
@@ -42,7 +43,6 @@
     position: absolute;
     bottom: 1.3rem;
     right: 3.7rem;
-    z-index: -1;
 }
 
 @media (max-width: 73em) {
