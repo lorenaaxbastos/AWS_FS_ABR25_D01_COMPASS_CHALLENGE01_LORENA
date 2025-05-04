@@ -69,7 +69,8 @@
     transition: var(--transition-default);
 }
 
-.logo:hover {
+.logo:hover,
+.logo:focus-visible {
     transform: rotate(-8deg) scale(1.07);
 }
 
@@ -87,13 +88,17 @@
     gap: 2rem;
 }
 
-.icon {
+.img {
     font-size: 2rem;
     color: var(--color-white);
+}
+
+.icon {
     transition: var(--transition-default);
 }
 
-.icon:hover {
+.icon:hover,
+.icon:focus-visible {
     transform: scale(1.2);
 }
 
@@ -120,7 +125,8 @@
     transition: var(--transition-default);
 }
 
-.footer__link:hover {
+.footer__link:hover,
+.footer__link:focus-visible {
     transform: scale(1.08);
 }
 

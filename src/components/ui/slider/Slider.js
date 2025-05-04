@@ -67,7 +67,7 @@ class Slider extends BaseComponent {
             slides.forEach((slide) => (slide.style.opacity = 0));
         }
 
-        const goToSlide = (index) => {
+        const goToSlide = (index, triggerButton) => {
             slides.forEach((slide, i) => {
                 if (effect === "slide") {
                     slide.style.transform = `translateX(${(i - index) * 100}%)`;
@@ -80,6 +80,10 @@ class Slider extends BaseComponent {
                     slide.focus();
                 }
             });
+
+            if (triggerButton) {
+                triggerButton.focus();
+            }
         };
 
         const updateButtons = () => {
@@ -92,13 +96,13 @@ class Slider extends BaseComponent {
 
         buttons.forEach((button, j) => {
             button.addEventListener("click", () => {
-                button.blur();
+                // button.blur();
 
                 const maxIndex = slides.length - 1;
                 if (j === 0 && currentSlide > 0) currentSlide--;
                 if (j === 1 && currentSlide < maxIndex) currentSlide++;
 
-                goToSlide(currentSlide);
+                goToSlide(currentSlide, button);
                 updateButtons();
             });
         });
@@ -107,14 +111,14 @@ class Slider extends BaseComponent {
             if (event.key === "ArrowLeft") {
                 if (currentSlide > 0) {
                     currentSlide--;
-                    goToSlide(currentSlide);
+                    goToSlide(currentSlide, buttons[0]);
                     updateButtons();
                 }
             }
             if (event.key === "ArrowRight") {
                 if (currentSlide < slides.length - 1) {
                     currentSlide++;
-                    goToSlide(currentSlide);
+                    goToSlide(currentSlide, buttons[1]);
                     updateButtons();
                 }
             }

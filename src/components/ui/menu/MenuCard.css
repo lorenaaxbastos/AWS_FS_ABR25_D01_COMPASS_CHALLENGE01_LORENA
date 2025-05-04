@@ -1,9 +1,22 @@
 .menu-card {
+    cursor: pointer;
     height: 100%;
     background-color: var(--color-secondary-light-01);
     display: flex;
     flex-direction: column;
     flex: 1 1 0;
+    transition: var(--transition-default);
+}
+
+.menu-card:hover,
+:host(:focus) {
+    transform: translateY(-0.5rem) scale(1.05);
+    box-shadow: 0 0.6rem 1.2rem var(--color-primary-dark-rgba-42);
+}
+
+.menu-card:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 0.3rem 0.6rem var(--color-primary-dark-rgba-42);
 }
 
 .menu-card__img {

@@ -17,16 +17,14 @@
     transition: var(--transition-default);
 }
 
-.btn:hover {
+.btn:hover,
+.btn:focus-visible {
     color: var(--color-secondary-light-02);
     background-color: var(--color-primary-dark-01);
 }
 
-.btn:focus {
-    outline: none;
-}
-
-.btn.hover-animated:hover {
+.btn.hover-animated:hover,
+.btn.hover-animated:focus-visible {
     transform: scale(1.05) translateY(-0.3rem);
 }
 
@@ -40,7 +38,8 @@
     background-color: var(--color-white);
 }
 
-.btn.outline:hover {
+.btn.outline:hover,
+.btn.outline:focus-visible {
     background-color: var(--color-secondary-light-02);
 }
 
@@ -48,7 +47,8 @@
     box-shadow: 0 0.6rem 1.2rem var(--color-secondary-rgba-22);
 }
 
-.btn.shadow-on:hover {
+.btn.shadow-on:hover,
+.btn.shadow-on:focus-visible {
     box-shadow: 0 0.6rem 1.2rem var(--color-primary-dark-rgba-22);
 }
 
@@ -60,37 +60,43 @@
     color: var(--color-primary);
 }
 
-.btn.active:hover {
+.btn.active:hover,
+.btn.active:focus-visible {
     color: var(--color-primary);
     background-color: var(--color-secondary);
 }
 
-.btn.dark-bg:hover {
+.btn.dark-bg:hover,
+.btn.dark-bg:focus-visible {
     color: var(--color-primary);
     background-color: var(--color-secondary-light-02);
     box-shadow: 0 0.3rem 0.6rem var(--color-secondary-rgba-42);
 }
 
-:host-context(.header.scroll) .btn:hover {
+:host-context(.header.scroll) .btn:hover,
+:host-context(.header.scroll) .btn:focus-visible {
     color: var(--color-secondary-light-02);
     background-color: var(--color-primary-dark-01);
     box-shadow: 0 0.6rem 1.2rem var(--color-primary-dark-rgba-22);
 }
 
-:host-context(.header:not(.transparent)) .btn:hover {
+:host-context(.header:not(.transparent)) .btn:hover,
+:host-context(.header:not(.transparent)) .btn:focus-visible {
     color: var(--color-secondary-light-02);
     background-color: var(--color-primary-dark-01);
     box-shadow: 0 0.6rem 1.2rem var(--color-primary-dark-rgba-22);
 }
 
 @media (max-width: 48em) {
-    :host-context(.header.scroll) .btn:hover {
+    :host-context(.header.scroll) .btn:hover,
+    :host-context(.header.scroll) .btn:focus-visible {
         color: var(--color-primary);
         background-color: var(--color-secondary-light-02);
         box-shadow: 0 0.3rem 0.6rem var(--color-secondary-rgba-42);
     }
 
-    :host-context(.header:not(.transparent)) .btn:hover {
+    :host-context(.header:not(.transparent)) .btn:hover,
+    :host-context(.header:not(.transparent)) .btn:focus-visible {
         color: var(--color-primary);
         background-color: var(--color-secondary-light-02);
         box-shadow: 0 0.3rem 0.6rem var(--color-secondary-rgba-42);

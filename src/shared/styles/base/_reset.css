@@ -6,6 +6,11 @@
     box-sizing: inherit;
 }
 
+*:focus,
+*:focus-visible {
+    outline: none;
+}
+
 html {
     font-size: 62.5%;
 }

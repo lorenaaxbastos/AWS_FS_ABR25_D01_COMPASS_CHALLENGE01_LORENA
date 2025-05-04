@@ -73,6 +73,9 @@ class MenuTable extends BaseComponent {
 
             const div = document.createElement("div");
             div.classList.add("menu-table__head-cell-content");
+            div.setAttribute("tabindex", "0");
+            div.setAttribute("role", "button");
+            div.setAttribute("aria-pressed", "false");
 
             const spanText = document.createElement("span");
             spanText.classList.add("menu-table__head-text");
@@ -106,8 +109,10 @@ class MenuTable extends BaseComponent {
                                 "active--desc"
                             );
                         }
+                        otherDiv.setAttribute("aria-pressed", "false");
                     });
 
+                div.setAttribute("aria-pressed", "true");
                 selectedIcon.classList.add("active");
                 selectedIcon.classList.toggle("active--desc");
 
@@ -116,6 +121,13 @@ class MenuTable extends BaseComponent {
 
                 const sortedRows = sortRowsByColumn(getRows(), index, desc);
                 sortedRows.forEach((row) => tbody.appendChild(row));
+            });
+
+            div.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    div.click();
+                }
             });
         });
 

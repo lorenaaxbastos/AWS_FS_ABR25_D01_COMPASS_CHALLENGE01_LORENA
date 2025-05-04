@@ -26,7 +26,8 @@
     color: var(--color-primary);
 }
 
-.header.scroll .logo:hover {
+.header.scroll .logo:hover,
+.header.scroll .logo:focus-visible {
     color: var(--color-secondary);
 }
 
@@ -34,7 +35,8 @@
     color: var(--color-primary);
 }
 
-.header:not(.transparent) .logo:hover {
+.header:not(.transparent) .logo:hover,
+.header:not(.transparent) .logo:focus-visible {
     color: var(--color-secondary);
 }
 
@@ -56,7 +58,8 @@
     transition: var(--transition-default);
 }
 
-.logo:hover {
+.logo:hover,
+.logo:focus-visible {
     color: var(--color-secondary);
     transform: rotate(-8deg) scale(1.07);
 }

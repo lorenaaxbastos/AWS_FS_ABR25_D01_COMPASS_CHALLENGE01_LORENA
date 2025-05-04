@@ -79,6 +79,16 @@
     gap: 0.5rem;
 }
 
+.menu-table__head-cell-content > * {
+    transition: var(--transition-default);
+}
+
+.menu-table__head-cell-content:hover > *,
+.menu-table__head-cell-content:focus-visible > * {
+    transform: translateY(-0.3rem) scale(1.05);
+    text-shadow: 0 0.1rem 0.3rem var(--color-primary-dark-rgba-42);
+}
+
 .menu-table__order-icon {
     opacity: 0.42;
 }

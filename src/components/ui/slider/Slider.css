@@ -32,10 +32,6 @@
     transform: translate(50%, -50%);
 }
 
-.slider__btn:focus {
-    outline: none;
-}
-
 .slider__btn:hover,
 .slider__btn:focus-visible {
     background-color: var(--color-primary-dark-01);
@@ -80,10 +76,6 @@
 
 .slides > *.active {
     opacity: 1 !important;
-}
-
-.slides > *.active:focus-visible {
-    outline: none;
 }
 
 @media (max-width: 27em) {

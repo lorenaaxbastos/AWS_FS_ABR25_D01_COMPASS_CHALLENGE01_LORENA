@@ -9,6 +9,7 @@ class MenuCard extends BaseComponent {
     static componentName = "MenuCard";
 
     setupAttributes() {
+        const card = this.shadowRoot.querySelector(".menu-card");
         const name = this.shadowRoot.querySelector(".menu-card__name");
         const ingredients = this.shadowRoot.querySelector(
             ".menu-card__ingredients"
@@ -39,6 +40,23 @@ class MenuCard extends BaseComponent {
         );
 
         button.setAttribute("href", this.getAttribute("product-url"));
+        button.setAttribute("tabindex", "-1");
+        button.removeAttribute("role");
+
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("role", "link");
+
+        card.addEventListener("click", () => {
+            const realButton = button.shadowRoot.querySelector("a");
+            window.open(realButton.href, "_self");
+        });
+
+        card.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                card.click();
+            }
+        });
     }
 }
 
