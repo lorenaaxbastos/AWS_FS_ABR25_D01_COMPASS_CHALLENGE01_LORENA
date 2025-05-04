@@ -1,6 +1,6 @@
 .subscription {
     min-height: 6.6rem;
-    max-width: 65.5rem;
+    width: 100%;
     transform-origin: center left;
     transition: var(--transition-default);
 }
@@ -70,7 +70,7 @@
 .subscription__btn:hover,
 .subscription__btn:focus {
     color: var(--color-secondary-light-02);
-    background-color: var(--color-primary-dark);
+    background-color: var(--color-primary-dark-01);
     box-shadow: 0 0.6rem 1.2rem var(--color-secondary-rgba-22);
 }
 
@@ -88,15 +88,8 @@
     padding: 0;
 }
 
-@media (max-width: 48em) {
-    .subscription {
-        max-width: 90%;
-    }
-}
-
 @media (max-width: 27em) {
     .subscription {
-        max-width: 100%;
         transform-origin: center top;
     }
 

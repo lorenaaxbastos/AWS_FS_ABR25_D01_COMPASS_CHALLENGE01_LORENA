@@ -3,7 +3,8 @@
     top: 0;
     left: 0;
     width: 100%;
-    padding: var(--site-h-padding);
+    padding-left: var(--site-h-padding);
+    padding-right: var(--site-h-padding);
     transition: var(--transition-default);
     z-index: 9999;
 }
@@ -21,21 +22,19 @@
     box-shadow: 0 0.3rem 0.6rem var(--color-primary-dark-rgba-22);
 }
 
-.header:not([transparent]) {
-}
-
-.header:not([transparent]) .logo {
-    color: var(--color-primary);
-}
-.header:not([transparent]) .logo:hover {
-    color: var(--color-secondary);
-}
-
 .header.scroll .logo {
     color: var(--color-primary);
 }
 
 .header.scroll .logo:hover {
+    color: var(--color-secondary);
+}
+
+.header:not(.transparent) .logo {
+    color: var(--color-primary);
+}
+
+.header:not(.transparent) .logo:hover {
     color: var(--color-secondary);
 }
 

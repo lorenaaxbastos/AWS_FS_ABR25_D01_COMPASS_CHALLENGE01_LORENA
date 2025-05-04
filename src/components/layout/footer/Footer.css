@@ -1,6 +1,6 @@
 .footer-wrapper {
     position: relative;
-    background-color: var(--color-primary-dark);
+    background-color: var(--color-primary-dark-01);
     overflow: hidden;
 }
 
@@ -23,8 +23,10 @@
 
 .footer {
     max-width: var(--site-max-width);
-    margin: 0 auto;
     padding: 16.2rem 0 7.2rem;
+    padding-left: var(--site-h-padding);
+    padding-right: var(--site-h-padding);
+    margin: 0 auto;
     display: grid;
     grid-template-columns: 2.5fr 1fr 1fr 2fr;
     gap: 6.6rem;
@@ -44,6 +46,11 @@
 
 .footer__content:last-child .text {
     font-size: 1.8rem;
+    text-transform: initial;
+}
+
+.footer__content:last-child .footer__link {
+    text-transform: initial;
 }
 
 .logo:link,
@@ -119,7 +126,8 @@
 
 @media (max-width: 78em) {
     .footer {
-        padding: 16.2rem 2rem 7.2rem;
+        padding-top: 16.2rem;
+        padding-bottom: 7.2rem;
     }
 
     .footer__link,
@@ -152,7 +160,8 @@
 
 @media (max-width: 48em) {
     .footer {
-        padding: 7.2rem 2rem;
+        padding-top: 7.2rem;
+        padding-bottom: 7.2rem;
         grid-template-columns: 1fr 1fr;
         gap: 6.6rem;
     }
@@ -164,7 +173,8 @@
 
 @media (max-width: 34em) {
     .footer {
-        padding: 5.3rem 2rem;
+        padding-top: 5.3rem;
+        padding-bottom: 7.2rem;
         grid-template-columns: 1fr;
         gap: 6rem;
     }

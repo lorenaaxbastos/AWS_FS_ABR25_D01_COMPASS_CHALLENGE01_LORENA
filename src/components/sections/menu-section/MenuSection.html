@@ -1,0 +1,30 @@
+<style>
+    ui-menu-cards {
+        display: block;
+        margin-bottom: 8rem;
+    }
+
+    ui-menu-table {
+        display: block;
+        margin-bottom: 6rem;
+    }
+
+    @media (max-width: 48em) {
+        ui-menu-cards {
+            margin-bottom: 0;
+        }
+    }
+</style>
+<div class="section-menu__wrapper">
+    <div class="section-menu__content">
+        <h2 class="heading heading--secondary">
+            Enjoy a new blend of coffee style
+        </h2>
+        <p class="paragraph">
+            Explore all flavours on our menu with us. There is always a new
+            worth experiencing
+        </p>
+        <ui-menu-cards data="/src/data/all-items.json"></ui-menu-cards>
+        <ui-menu-table data="/src/data/all-items.json"></ui-menu-table>
+    </div>
+</div>

@@ -40,18 +40,23 @@
     color: var(--color-secondary);
 }
 
-:host-context(.header:not([transparent])) .nav__link {
-    color: var(--color-primary);
-}
-:host-context(.header:not([transparent])) .nav__link:hover {
-    color: var(--color-secondary);
-}
-
 :host-context(.header.scroll) .nav__link {
     color: var(--color-primary);
 }
 
 :host-context(.header.scroll) .nav__link:hover {
+    color: var(--color-secondary);
+}
+
+:host-context(.header:not(.transparent)) .nav__link {
+    color: var(--color-primary);
+}
+
+:host-context(.header:not(.transparent)) .nav__link:hover {
+    color: var(--color-secondary);
+}
+
+:host-context(.header:not(.transparent)) .nav__link:hover {
     color: var(--color-secondary);
 }
 
@@ -123,31 +128,28 @@
         transition: all 0.3s ease;
     }
 
-    :host-context(.header:not([transparent])) .nav__icon span {
-        background-color: var(--color-primary);
-    }
-
-    :host-context(.header:not([transparent])) .nav.nav--mobile .nav__icon span {
-        background-color: var(--color-white);
-    }
-
-    :host-context(.header:not([transparent])) .nav__icon span {
-        background-color: var(--color-primary);
-    }
-
-    :host-context(.header.scroll) .nav__icon:not(.open) span {
-        background-color: var(--color-primary);
+    .nav__icon.open span:nth-child(1) {
+        transform: translateY(300%) rotate(45deg);
     }
 
     .nav__icon.open span:nth-child(2) {
         display: none;
     }
 
-    .nav__icon.open span:nth-child(1) {
-        transform: translateY(300%) rotate(45deg);
-    }
     .nav__icon.open span:nth-child(3) {
         transform: translateY(-300%) rotate(-45deg);
+    }
+
+    :host-context(.header.scroll) .nav__icon:not(.open) span {
+        background-color: var(--color-primary);
+    }
+
+    :host-context(.header:not(.transparent)) .nav__icon span {
+        background-color: var(--color-primary);
+    }
+
+    :host-context(.header:not(.transparent)) .nav__icon.open span {
+        background-color: var(--color-white);
     }
 
     .nav__list {
@@ -180,13 +182,15 @@
         color: var(--color-white);
     }
 
-    :host-context(.header:not([transparent])) .nav.nav--mobile .nav__link {
+    :host-context(.header.scroll) .nav--mobile .nav__link:hover {
+        color: var(--color-secondary);
+    }
+
+    :host-context(.header:not(.transparent)) .nav.nav--mobile .nav__link {
         color: var(--color-white);
     }
 
-    :host-context(.header:not([transparent]))
-        .nav.nav--mobile
-        .nav__link:hover {
+    :host-context(.header:not(.transparent)) .nav.nav--mobile .nav__link:hover {
         color: var(--color-secondary);
     }
 

@@ -1,0 +1,50 @@
+.section-menu__wrapper {
+    position: relative;
+}
+
+.section-menu__content {
+    max-width: var(--site-max-width);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.section-menu__content::after {
+    content: "";
+    width: 49.8rem;
+    display: block;
+    position: absolute;
+    top: -22.7rem;
+    left: -12.1rem;
+    aspect-ratio: 1/1;
+    background-image: url("/src/imgs/detail-01.webp");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    transform: scaleY(-1);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.heading--secondary {
+    margin-bottom: 1.6rem;
+}
+
+.paragraph {
+    margin-bottom: 3.2rem;
+}
+
+@media (max-width: 48em) {
+    .section-menu__content {
+        padding-top: 6.9rem;
+    }
+
+    .paragraph {
+        margin-bottom: 6rem;
+    }
+}
+
+@media (max-width: 23.75em) {
+    .section-menu__content::after {
+        left: -18.1rem;
+    }
+}

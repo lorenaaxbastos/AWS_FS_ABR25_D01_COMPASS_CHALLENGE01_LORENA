@@ -5,10 +5,12 @@
     --color-black-rgba-34: rgb(0, 0, 0, 0.34);
     --color-grey-dark: #1e1e1e;
     --color-grey: #707070;
-    --color-primary-dark: #442808;
+    --color-primary-dark-01: #442808;
+    --color-primary-dark-02: #251503;
     --color-primary-dark-rgba-42: rgba(68, 40, 8, 0.42);
     --color-primary-dark-rgba-22: rgba(68, 40, 8, 0.22);
     --color-primary: #603809;
+    --color-primary-rgba-80: rgba(96, 56, 9, 0.8);
     --color-primary-light-01: #aa8558;
     --color-primary-light-02: #968162;
     --color-secondary-dark: #ffad3b;
@@ -20,5 +22,11 @@
     --transition-default: all 0.3s cubic-bezier(0.56, -0.3, 0.22, 0.85);
     --transition-menu: opacity 0.3s ease;
     --site-max-width: 118rem;
-    --site-h-padding: 0 2rem;
+    --site-h-padding: 0;
+}
+
+@media (max-width: 85.375em) {
+    :root {
+        --site-max-width: 86.38%;
+    }
 }

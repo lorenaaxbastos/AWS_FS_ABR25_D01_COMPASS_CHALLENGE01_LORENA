@@ -19,7 +19,7 @@
 
 .btn:hover {
     color: var(--color-secondary-light-02);
-    background-color: var(--color-primary-dark);
+    background-color: var(--color-primary-dark-01);
 }
 
 .btn:focus {
@@ -65,7 +65,7 @@
     background-color: var(--color-secondary);
 }
 
-:host-context(.header) .btn:hover {
+.btn.dark-bg:hover {
     color: var(--color-primary);
     background-color: var(--color-secondary-light-02);
     box-shadow: 0 0.3rem 0.6rem var(--color-secondary-rgba-42);
@@ -73,25 +73,26 @@
 
 :host-context(.header.scroll) .btn:hover {
     color: var(--color-secondary-light-02);
-    background-color: var(--color-primary-dark);
+    background-color: var(--color-primary-dark-01);
     box-shadow: 0 0.6rem 1.2rem var(--color-primary-dark-rgba-22);
 }
 
-:host-context(.header:not([transparent])) .btn:hover {
+:host-context(.header:not(.transparent)) .btn:hover {
     color: var(--color-secondary-light-02);
-    background-color: var(--color-primary-dark);
+    background-color: var(--color-primary-dark-01);
     box-shadow: 0 0.6rem 1.2rem var(--color-primary-dark-rgba-22);
 }
 
-:host-context(.header:not([transparent])) .btn:hover {
-    color: var(--color-primary);
-    background-color: var(--color-secondary-light-02);
-    box-shadow: 0 0.3rem 0.6rem var(--color-secondary-rgba-42);
-}
+@media (max-width: 48em) {
+    :host-context(.header.scroll) .btn:hover {
+        color: var(--color-primary);
+        background-color: var(--color-secondary-light-02);
+        box-shadow: 0 0.3rem 0.6rem var(--color-secondary-rgba-42);
+    }
 
-@media (max-width: 64em) {
-    .btn {
-        padding: 0.8rem 2rem;
-        font-size: 1.4rem !important;
+    :host-context(.header:not(.transparent)) .btn:hover {
+        color: var(--color-primary);
+        background-color: var(--color-secondary-light-02);
+        box-shadow: 0 0.3rem 0.6rem var(--color-secondary-rgba-42);
     }
 }

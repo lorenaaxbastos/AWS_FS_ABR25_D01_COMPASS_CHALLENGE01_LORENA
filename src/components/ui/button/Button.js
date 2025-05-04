@@ -33,6 +33,7 @@ class Button extends BaseComponent {
             "shadow-on",
             "outline",
             "on-hover",
+            "dark-bg",
         ];
         for (const { name, value } of this.attributes) {
             if (!excludedAttrs.includes(name)) {
@@ -40,7 +41,7 @@ class Button extends BaseComponent {
             }
         }
 
-        ["shadow-on", "outline"].forEach((attr) => {
+        ["shadow-on", "outline", "dark-bg"].forEach((attr) => {
             if (this.hasAttribute(attr)) {
                 element.classList.add(attr);
             }

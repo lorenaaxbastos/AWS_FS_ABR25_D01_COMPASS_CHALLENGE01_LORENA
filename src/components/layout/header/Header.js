@@ -14,6 +14,16 @@ class Header extends BaseComponent {
                 header.getBoundingClientRect().height + "px";
         };
 
+        if (this.hasAttribute("transparent")) {
+            header.classList.add("transparent");
+        }
+
+        const isTransparent = () => {
+            if (!this.hasAttribute("transparent")) {
+                updateBodyMargin();
+            }
+        };
+
         const toggleHeaderBg = () => {
             if (window.scrollY > header.getBoundingClientRect().height) {
                 header.classList.add("scroll");
@@ -21,17 +31,18 @@ class Header extends BaseComponent {
                 header.classList.remove("scroll");
             }
 
-            // ✅ Garante que o updateBodyMargin aconteça na próxima renderização
-            requestAnimationFrame(updateBodyMargin);
+            isTransparent();
         };
 
-        if (!this.hasAttribute("transparent")) {
-            // define inicialmente
-            updateBodyMargin();
-        }
+        isTransparent();
+
+        const resizeObserver = new ResizeObserver(() => {
+            isTransparent();
+        });
+        resizeObserver.observe(header);
 
         window.addEventListener("scroll", toggleHeaderBg);
-        window.addEventListener("resize", updateBodyMargin);
+        window.addEventListener("resize", isTransparent);
     }
 }
 
