@@ -5,8 +5,6 @@ class CtaSection extends BaseComponent {
         super(import.meta.url);
     }
     static componentName = "CtaSection";
-
-    setupAttributes() {}
 }
 
 customElements.define("section-cta", CtaSection);

@@ -22,19 +22,13 @@
     box-shadow: 0 0.3rem 0.6rem var(--color-primary-dark-rgba-22);
 }
 
-.header.scroll .logo {
-    color: var(--color-primary);
-}
-
-.header.scroll .logo:hover,
-.header.scroll .logo:focus-visible {
-    color: var(--color-secondary);
-}
-
+.header.scroll .logo,
 .header:not(.transparent) .logo {
     color: var(--color-primary);
 }
 
+.header.scroll .logo:hover,
+.header.scroll .logo:focus-visible,
 .header:not(.transparent) .logo:hover,
 .header:not(.transparent) .logo:focus-visible {
     color: var(--color-secondary);

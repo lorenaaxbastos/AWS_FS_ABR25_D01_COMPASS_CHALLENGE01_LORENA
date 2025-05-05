@@ -3,198 +3,271 @@ import { loadPartial } from "../../../utils/loader.js";
 import { priceFormatBR, titleCase } from "../../../utils/format.js";
 
 class MenuTable extends BaseComponent {
-    constructor() {
-        super(import.meta.url);
-    }
     static componentName = "MenuTable";
 
+    constructor() {
+        super(import.meta.url);
+        this.columns = [];
+        this.filterTags = ["All Items"];
+        this.tableContent = [];
+        this.boundHandleFilterClick = this.handleFilterClick.bind(this);
+        this.boundHandleSortKeydown = this.handleSortKeydown.bind(this);
+        this.boundHeaderClickHandlers = new Map();
+    }
+
     async setupAttributes() {
-        const columnsAttr = this.getAttribute("columns");
+        await this.setupColumns();
+        await this.setupData();
+        this.selectElements();
+        this.renderTable();
+        this.setupFilterButtonEventListeners();
+    }
 
-        let filterTags = ["All Items"];
-        let columns = columnsAttr
-            ? JSON.parse(columnsAttr)
-            : ["name", "type", "price"];
-
-        const data = await loadPartial(this.getAttribute("data"));
-        let tableContent = [];
-
-        (data?.data ?? []).forEach((product) => {
-            if (product.name && product.price) {
-                if (!filterTags.includes(product.type))
-                    filterTags.push(product.type);
-
-                tableContent.push(
-                    columns.reduce((acc, key) => {
-                        let value = product[key];
-                        if (key === "price") value = priceFormatBR(value);
-                        else
-                            value =
-                                typeof value === "string"
-                                    ? titleCase(value)
-                                    : value;
-
-                        acc[key] = value;
-                        return acc;
-                    }, {})
-                );
-            }
-        });
-
-        const theadRow = this.shadowRoot.querySelector(
+    selectElements() {
+        this.theadRow = this.shadowRoot.querySelector(
             ".menu-table__head .menu-table__row"
         );
-        const tbody = this.shadowRoot.querySelector(".menu-table__body");
-        const filtersContainer = this.shadowRoot.querySelector(
+        this.tbody = this.shadowRoot.querySelector(".menu-table__body");
+        this.filtersContainer = this.shadowRoot.querySelector(
             ".menu-table__filter-tags"
         );
+    }
 
-        const getRows = () => Array.from(tbody.querySelectorAll("tr"));
+    async setupColumns() {
+        const columnsAttr = this.getAttribute("columns");
+        if (columnsAttr) {
+            this.columns = JSON.parse(columnsAttr);
+            this.columnsWithTypeForFilter = this.columns.includes("type")
+                ? [...this.columns]
+                : [...this.columns, "type"];
+        } else {
+            this.columns = ["name", "type", "price"];
+            this.columnsWithTypeForFilter = [...this.columns];
+        }
+    }
 
-        const sortRowsByColumn = (rows, index, desc = false) => {
-            return rows.sort((a, b) => {
-                const valA = a.children[index].textContent.toUpperCase();
-                const valB = b.children[index].textContent.toUpperCase();
+    async setupData() {
+        const data = await loadPartial(this.getAttribute("data"));
+        data?.data?.forEach((product) => this.processProduct(product));
+    }
 
-                if (valA < valB) return desc ? 1 : -1;
-                if (valA > valB) return desc ? -1 : 1;
-                return 0;
-            });
-        };
+    processProduct(product) {
+        const productType = product.type ?? "";
+        if (product.name && product.price) {
+            if (!this.filterTags.includes(productType)) {
+                this.filterTags.push(productType);
+            }
 
-        theadRow.innerHTML = "";
+            const processedProduct = this.columns.reduce((acc, key) => {
+                let value = product[key];
+                if (key === "price") value = priceFormatBR(value);
+                if (key === "type" && value == null) value = "";
+                acc[key] = value;
+                return acc;
+            }, {});
 
-        columns.forEach((col, index) => {
-            const th = document.createElement("th");
-            th.classList.add("menu-table__cell");
-            th.dataset.columnIndex = index;
-            th.setAttribute("role", "columnheader");
-            th.setAttribute("scope", "col");
+            processedProduct.type = productType;
+            this.tableContent.push(processedProduct);
+        }
+    }
 
-            const div = document.createElement("div");
-            div.classList.add("menu-table__head-cell-content");
-            div.setAttribute("tabindex", "0");
-            div.setAttribute("role", "button");
-            div.setAttribute("aria-pressed", "false");
-
-            const spanText = document.createElement("span");
-            spanText.classList.add("menu-table__head-text");
-            spanText.textContent = titleCase(col.split("_").join(" "));
-
-            const icon = document.createElement("span");
-            icon.classList.add("menu-table__order-icon");
-            icon.innerHTML = "&#9650;";
-
-            if (index === 0) icon.classList.add("active");
-
-            div.appendChild(spanText);
-            div.appendChild(icon);
-            th.appendChild(div);
-            theadRow.appendChild(th);
-
-            div.addEventListener("click", () => {
-                const selectedIcon = div.querySelector(
-                    ".menu-table__order-icon"
-                );
-
-                theadRow
-                    .querySelectorAll(".menu-table__head-cell-content")
-                    .forEach((otherDiv) => {
-                        const otherIcon = otherDiv.querySelector(
-                            ".menu-table__order-icon"
-                        );
-                        if (otherDiv !== div) {
-                            otherIcon.classList.remove(
-                                "active",
-                                "active--desc"
-                            );
-                        }
-                        otherDiv.setAttribute("aria-pressed", "false");
-                    });
-
-                div.setAttribute("aria-pressed", "true");
-                selectedIcon.classList.add("active");
-                selectedIcon.classList.toggle("active--desc");
-
-                const desc = selectedIcon.classList.contains("active--desc");
-                th.setAttribute("aria-sort", desc ? "descending" : "ascending");
-
-                const sortedRows = sortRowsByColumn(getRows(), index, desc);
-                sortedRows.forEach((row) => tbody.appendChild(row));
-            });
-
-            div.addEventListener("keydown", (e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    div.click();
-                }
-            });
-        });
-
-        tableContent.forEach((product) => {
-            const tr = document.createElement("tr");
-            tr.classList.add("menu-table__row");
-
-            Object.keys(product).forEach((key) => {
-                const td = document.createElement("td");
-                td.classList.add("menu-table__cell");
-                td.textContent = product[key];
-                td.dataset[key] = product[key];
-                tr.appendChild(td);
-            });
-
-            tbody.appendChild(tr);
-        });
-
-        const sortedRows = sortRowsByColumn(getRows(), 0);
-        sortedRows.forEach((row) => tbody.appendChild(row));
-
-        if (filterTags.length <= 1) {
-            filtersContainer.style.display = "none";
+    renderFilterTags() {
+        if (this.filterTags.length <= 1) {
+            this.filtersContainer.style.display = "none";
             return;
         }
 
-        filtersContainer.innerHTML = "";
-        filterTags.forEach((tag, index) => {
-            const button = document.createElement("ui-button");
-            button.setAttribute("label", tag);
-            button.setAttribute("data-tag", tag);
-            button.setAttribute("data-role", "button");
-            button.setAttribute("size", "medium");
+        this.filtersContainer.innerHTML = "";
+        this.filterTags.forEach((tag, index) => {
+            const button = this.createFilterButton(tag, index);
+            this.filtersContainer.appendChild(button);
+        });
+    }
 
-            if (index === 0) {
-                button.classList.add("active");
-            } else {
-                button.setAttribute("outline", "");
-            }
+    renderTable() {
+        this.clearHeaderListeners();
+        this.renderTableHeaders();
+        this.renderTableRows();
+        this.renderFilterTags();
+        this.sortRows();
+    }
 
-            filtersContainer.appendChild(button);
+    renderTableHeaders() {
+        this.theadRow.innerHTML = "";
+        this.columns.forEach((col, index) => {
+            const th = this.createHeaderCell(col, index);
+            this.theadRow.appendChild(th);
+        });
+    }
+
+    renderTableRows() {
+        this.tbody.innerHTML = "";
+        this.tableContent.forEach((product) => {
+            const tr = document.createElement("tr");
+            tr.classList.add("menu-table__row");
+            const rowType = product.type ?? "";
+            tr.dataset.type = rowType;
+            this.columns.forEach((col) => {
+                const td = this.createRowCell(product[col], col);
+                tr.appendChild(td);
+            });
+            this.tbody.appendChild(tr);
+        });
+    }
+
+    createFilterButton(tag, index) {
+        const button = document.createElement("ui-button");
+        button.setAttribute("label", tag);
+        button.setAttribute("data-tag", tag);
+        button.setAttribute("data-role", "button");
+        button.setAttribute("size", "medium");
+        if (index === 0) button.classList.add("active");
+        else button.setAttribute("outline", "");
+        return button;
+    }
+
+    createHeaderCell(col, index) {
+        const th = document.createElement("th");
+        th.classList.add("menu-table__cell");
+        th.dataset.columnIndex = index;
+        th.setAttribute("role", "columnheader");
+        th.setAttribute("scope", "col");
+
+        const div = document.createElement("div");
+        div.classList.add("menu-table__head-cell-content");
+        div.setAttribute("tabindex", "0");
+        div.setAttribute("role", "button");
+        div.setAttribute("aria-pressed", "false");
+
+        const spanText = document.createElement("span");
+        spanText.classList.add("menu-table__head-text");
+        spanText.textContent = titleCase(col.split("_").join(" "));
+
+        const icon = document.createElement("span");
+        icon.classList.add("menu-table__order-icon");
+        icon.innerHTML = "&#9650;";
+        if (index === 0) icon.classList.add("active");
+
+        div.appendChild(spanText);
+        div.appendChild(icon);
+        th.appendChild(div);
+
+        const boundClick = () => this.handleSortClick(div, icon, index);
+        div.addEventListener("click", boundClick);
+        div.addEventListener("keydown", this.boundHandleSortKeydown);
+
+        this.boundHeaderClickHandlers.set(div, boundClick);
+
+        return th;
+    }
+
+    createRowCell(value, key) {
+        const td = document.createElement("td");
+        td.classList.add("menu-table__cell");
+        td.textContent = value;
+        td.dataset[key] = value;
+        return td;
+    }
+
+    resetSortIcons(div) {
+        this.theadRow
+            .querySelectorAll(".menu-table__head-cell-content")
+            .forEach((otherDiv) => {
+                const otherIcon = otherDiv.querySelector(
+                    ".menu-table__order-icon"
+                );
+                if (otherDiv !== div)
+                    otherIcon.classList.remove("active", "active--desc");
+                otherDiv.setAttribute("aria-pressed", "false");
+            });
+    }
+
+    getRows() {
+        return Array.from(this.tbody.querySelectorAll("tr"));
+    }
+
+    filterRowsByType(typeSelected) {
+        this.getRows().forEach((row) => {
+            const rowType = row.dataset.type ?? "";
+            const isVisible =
+                typeSelected === "All Items" || rowType === typeSelected;
+            row.style.display = isVisible ? "" : "none";
+        });
+    }
+
+    sortRows() {
+        const sortedRows = this.sortRowsByColumn(this.getRows(), 0);
+        sortedRows.forEach((row) => this.tbody.appendChild(row));
+    }
+
+    sortRowsByColumn(rows, index, desc = false) {
+        return rows.sort((a, b) => {
+            const valA = a.children[index].textContent.toUpperCase();
+            const valB = b.children[index].textContent.toUpperCase();
+            if (valA < valB) return desc ? 1 : -1;
+            if (valA > valB) return desc ? -1 : 1;
+            return 0;
+        });
+    }
+
+    handleSortClick(div, icon, index) {
+        this.resetSortIcons(div);
+        div.setAttribute("aria-pressed", "true");
+        icon.classList.add("active");
+        icon.classList.toggle("active--desc");
+        const desc = icon.classList.contains("active--desc");
+        div.setAttribute("aria-sort", desc ? "descending" : "ascending");
+        const sortedRows = this.sortRowsByColumn(this.getRows(), index, desc);
+        sortedRows.forEach((row) => this.tbody.appendChild(row));
+    }
+
+    handleSortKeydown(e) {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            e.target.click();
+        }
+    }
+
+    handleFilterClick(event) {
+        const btnSelected = event.target.closest("ui-button");
+        if (!btnSelected) return;
+
+        const buttons = this.filtersContainer.querySelectorAll("ui-button");
+        buttons.forEach((button) => {
+            button.classList.remove("active");
+            button.setAttribute("outline", "");
+            button.setAttribute("aria-pressed", "false");
         });
 
-        const buttons = filtersContainer.querySelectorAll("ui-button");
+        btnSelected.classList.add("active");
+        btnSelected.removeAttribute("outline");
+        btnSelected.setAttribute("aria-pressed", "true");
 
-        filtersContainer.addEventListener("click", (event) => {
-            const btnSelected = event.target.closest("ui-button");
-            if (!btnSelected) return;
+        const typeSelected = btnSelected.getAttribute("data-tag");
+        this.filterRowsByType(typeSelected);
+    }
 
-            buttons.forEach((button) => {
-                button.classList.remove("active");
-                button.setAttribute("outline", "");
-                button.setAttribute("aria-pressed", "false");
-            });
-            btnSelected.classList.add("active");
-            btnSelected.removeAttribute("outline");
-            btnSelected.setAttribute("aria-pressed", "true");
+    setupFilterButtonEventListeners() {
+        this.filtersContainer.addEventListener(
+            "click",
+            this.boundHandleFilterClick
+        );
+    }
 
-            const typeSelected = btnSelected.getAttribute("data-tag");
-
-            getRows().forEach((row) => {
-                const typeCell = row.querySelector("[data-type]").textContent;
-                const isVisible =
-                    typeSelected === "All Items" || typeCell === typeSelected;
-                row.style.display = isVisible ? "" : "none";
-            });
+    clearHeaderListeners() {
+        this.boundHeaderClickHandlers.forEach((clickHandler, div) => {
+            div.removeEventListener("click", clickHandler);
+            div.removeEventListener("keydown", this.boundHandleSortKeydown);
         });
+        this.boundHeaderClickHandlers.clear();
+    }
+
+    disconnectedCallback() {
+        this.filtersContainer.removeEventListener(
+            "click",
+            this.boundHandleFilterClick
+        );
+        this.clearHeaderListeners();
     }
 }
 

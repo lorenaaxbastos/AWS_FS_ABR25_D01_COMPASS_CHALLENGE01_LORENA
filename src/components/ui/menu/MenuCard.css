@@ -9,7 +9,7 @@
 }
 
 .menu-card:hover,
-:host(:focus) {
+.menu-card:focus {
     transform: translateY(-0.5rem) scale(1.05);
     box-shadow: 0 0.6rem 1.2rem var(--color-primary-dark-rgba-42);
 }

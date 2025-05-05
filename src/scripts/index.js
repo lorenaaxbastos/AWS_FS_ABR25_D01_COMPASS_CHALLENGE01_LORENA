@@ -16,9 +16,6 @@ async function initApp() {
         const page = await loadPartial("./src/pages/home.html");
         const pageContainer = root.querySelector("#page-content");
 
-        // HIDE: SPINNER TEST
-        // await new Promise((resolve) => setTimeout(resolve, 5000));
-
         if (pageContainer) {
             pageContainer.innerHTML = page;
         }

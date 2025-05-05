@@ -5,8 +5,6 @@ class SubscriptionSection extends BaseComponent {
         super(import.meta.url);
     }
     static componentName = "SubscriptionSection";
-
-    setupAttributes() {}
 }
 
 customElements.define("section-subscription", SubscriptionSection);

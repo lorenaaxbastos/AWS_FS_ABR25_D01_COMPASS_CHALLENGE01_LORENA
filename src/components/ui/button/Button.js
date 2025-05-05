@@ -1,24 +1,42 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class Button extends BaseComponent {
+    static componentName = "Button";
+
     constructor() {
         super(import.meta.url);
     }
-    static componentName = "Button";
 
     setupAttributes() {
-        const isLink = this.hasAttribute("href");
-        const button = this.shadowRoot.querySelector('[data-role="button"]');
-        const link = this.shadowRoot.querySelector('[data-role="link"]');
+        this.selectElements();
+        this.setupAttributesForButton();
+        this.setupMutationObserver();
+    }
 
-        const element = isLink ? link : button;
-        const other = isLink ? button : link;
+    selectElements() {
+        this.button = this.shadowRoot.querySelector('[data-role="button"]');
+        this.link = this.shadowRoot.querySelector('[data-role="link"]');
+    }
+
+    setupAttributesForButton() {
+        const isLink = this.hasAttribute("href");
+        const element = isLink ? this.link : this.button;
+        const other = isLink ? this.button : this.link;
 
         other.remove();
 
+        this.setLabel(element);
+        this.setSize(element);
+        this.setAdditionalAttributes(element);
+        this.setClassAttributes(element);
+    }
+
+    setLabel(element) {
         const label = this.getAttribute("label") || "Order Now";
         element.innerText = label;
+    }
 
+    setSize(element) {
         const size = this.getAttribute("size") || "large";
         const fontSizeMap = {
             small: "1.4rem",
@@ -26,7 +44,9 @@ class Button extends BaseComponent {
             large: "1.6rem",
         };
         element.style.fontSize = fontSizeMap[size] || fontSizeMap["large"];
+    }
 
+    setAdditionalAttributes(element) {
         const excludedAttrs = [
             "label",
             "size",
@@ -40,12 +60,15 @@ class Button extends BaseComponent {
                 element.setAttribute(name, value);
             }
         }
+    }
 
+    setClassAttributes(element) {
         ["shadow-on", "outline", "dark-bg"].forEach((attr) => {
             if (this.hasAttribute(attr)) {
                 element.classList.add(attr);
             }
         });
+
         if (
             this.hasAttribute("on-hover") &&
             this.getAttribute("on-hover") === "animated"
@@ -54,10 +77,25 @@ class Button extends BaseComponent {
         }
 
         if (this.classList.contains("active")) {
-            element.classList.add("btn", isLink ? "btn--link" : "btn--btn");
+            element.classList.add(
+                "btn",
+                this.hasAttribute("href") ? "btn--link" : "btn--btn"
+            );
         }
+    }
 
-        const observer = new MutationObserver((mutations) => {
+    updateOutlineClass(internalButton) {
+        if (this.hasAttribute("outline")) {
+            internalButton.classList.add("outline");
+            internalButton.classList.remove("active");
+        } else {
+            internalButton.classList.remove("outline");
+            internalButton.classList.add("active");
+        }
+    }
+
+    setupMutationObserver() {
+        this.observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (
                     mutation.type === "attributes" &&
@@ -66,20 +104,24 @@ class Button extends BaseComponent {
                     const internalButton = this.shadowRoot.querySelector(
                         '[data-role="button"]'
                     );
-                    if (this.hasAttribute("outline")) {
-                        internalButton.classList.add("outline");
-                        internalButton.classList.remove("active");
-                    } else {
-                        internalButton.classList.remove("outline");
-                        internalButton.classList.add("active");
-                    }
+                    this.updateOutlineClass(internalButton);
                 }
             });
         });
 
-        observer.observe(this, {
+        this.observer.observe(this, {
             attributes: true,
         });
+    }
+
+    cleanupMutationObserver() {
+        if (this.observer) {
+            this.observer.disconnect();
+        }
+    }
+
+    disconnectedCallback() {
+        this.cleanupMutationObserver();
     }
 }
 

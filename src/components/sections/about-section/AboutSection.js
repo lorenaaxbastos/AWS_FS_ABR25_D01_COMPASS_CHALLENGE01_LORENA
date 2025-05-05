@@ -5,8 +5,6 @@ class AboutSection extends BaseComponent {
         super(import.meta.url);
     }
     static componentName = "AboutSection";
-
-    setupAttributes() {}
 }
 
 customElements.define("section-about", AboutSection);

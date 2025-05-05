@@ -53,11 +53,14 @@
     opacity: 1;
     visibility: visible;
     transition: var(--transition-default);
+    transition: var(--transition-default);
+    height: 3.4rem;
 }
 
 .subscription__message.hidden {
     opacity: 0;
     visibility: hidden;
+    height: 3.4rem;
 }
 
 .subscription__btn:hover,

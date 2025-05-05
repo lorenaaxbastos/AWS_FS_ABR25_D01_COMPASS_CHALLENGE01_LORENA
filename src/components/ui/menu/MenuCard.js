@@ -1,24 +1,32 @@
 import { BaseComponent } from "../../BaseComponent.js";
-import { priceFormatBR } from "../../../utils/format.js";
-import { titleCase } from "../../../utils/format.js";
+import { priceFormatBR, titleCase } from "../../../utils/format.js";
 
 class MenuCard extends BaseComponent {
+    static componentName = "MenuCard";
+
     constructor() {
         super(import.meta.url);
     }
-    static componentName = "MenuCard";
 
     setupAttributes() {
-        const card = this.shadowRoot.querySelector(".menu-card");
-        const name = this.shadowRoot.querySelector(".menu-card__name");
-        const ingredients = this.shadowRoot.querySelector(
+        this.selectElements();
+        this.setupCardAttributes();
+        this.setupEventListeners();
+    }
+
+    selectElements() {
+        this.card = this.shadowRoot.querySelector(".menu-card");
+        this.name = this.shadowRoot.querySelector(".menu-card__name");
+        this.ingredients = this.shadowRoot.querySelector(
             ".menu-card__ingredients"
         );
-        const price = this.shadowRoot.querySelector(".menu-card__price");
-        const img = this.shadowRoot.querySelector(".menu-card__img");
-        const button = this.shadowRoot.querySelector("ui-button");
+        this.price = this.shadowRoot.querySelector(".menu-card__price");
+        this.img = this.shadowRoot.querySelector(".menu-card__img");
+        this.button = this.shadowRoot.querySelector("ui-button");
+    }
 
-        [name, ingredients, price].forEach((el) => {
+    setupCardAttributes() {
+        [this.name, this.ingredients, this.price].forEach((el) => {
             const key = el.classList.value.split("__")[1];
             const value = this.getAttribute(`product-${key}`);
 
@@ -30,33 +38,46 @@ class MenuCard extends BaseComponent {
                     : value;
         });
 
-        const value =
+        const imgUrl =
             this.getAttribute("product-img") ||
             "/src/imgs/default-product.webp";
-        img.style.backgroundImage = `url(${value})`;
-        img.setAttribute(
+        this.img.style.backgroundImage = `url(${imgUrl})`;
+        this.img.setAttribute(
             "aria-label",
-            `Photo of ${name?.textContent || "product"}`
+            `Photo of ${this.name?.textContent || "product"}`
         );
 
-        button.setAttribute("href", this.getAttribute("product-url"));
-        button.setAttribute("tabindex", "-1");
-        button.removeAttribute("role");
+        this.button.setAttribute("tabindex", "-1");
+        this.button.removeAttribute("role");
 
-        card.setAttribute("tabindex", "0");
-        card.setAttribute("role", "link");
+        this.card.setAttribute("tabindex", "0");
+        this.card.setAttribute("role", "link");
+    }
 
-        card.addEventListener("click", () => {
-            const realButton = button.shadowRoot.querySelector("a");
-            window.open(realButton.href, "_self");
-        });
+    handleCardClick = () => {
+        window.open(this.getAttribute("product-url"), "_self");
+        this.card.blur();
+    };
 
-        card.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                card.click();
-            }
-        });
+    handleCardKeyDown = (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            this.card.click();
+        }
+    };
+
+    setupEventListeners() {
+        this.card.addEventListener("click", this.handleCardClick);
+        this.card.addEventListener("keydown", this.handleCardKeyDown);
+    }
+
+    cleanupEventListeners() {
+        this.card.removeEventListener("click", this.handleCardClick);
+        this.card.removeEventListener("keydown", this.handleCardKeyDown);
+    }
+
+    disconnectedCallback() {
+        this.cleanupEventListeners();
     }
 }
 

@@ -1,48 +1,83 @@
 import { BaseComponent } from "../../BaseComponent.js";
 
 class Header extends BaseComponent {
-    constructor() {
-        super(import.meta.url);
-    }
     static componentName = "Header";
 
+    constructor() {
+        super(import.meta.url);
+        this.resizeObserver = null;
+    }
+
     setupAttributes() {
-        const header = this.shadowRoot.querySelector("header");
+        this.selectElements();
+        this.initHeaderTransparency();
+        this.observeResize();
+        this.setupEventListeners();
+    }
 
-        const updateBodyMargin = () => {
-            document.body.style.marginTop =
-                header.getBoundingClientRect().height + "px";
-        };
+    selectElements() {
+        this.header = this.shadowRoot.querySelector("header");
+        this.logo = this.shadowRoot.querySelector(".logo");
+    }
 
+    initHeaderTransparency() {
         if (this.hasAttribute("transparent")) {
-            header.classList.add("transparent");
+            this.header.classList.add("transparent");
+        } else {
+            this.updateBodyMargin();
+        }
+    }
+
+    updateBodyMargin() {
+        const height = this.header.getBoundingClientRect().height;
+        document.body.style.marginTop = `${height}px`;
+    }
+
+    handleScroll = () => {
+        const scrollY = window.scrollY;
+        const headerHeight = this.header.getBoundingClientRect().height;
+
+        if (scrollY > headerHeight) {
+            this.header.classList.add("scroll");
+        } else {
+            this.header.classList.remove("scroll");
         }
 
-        const isTransparent = () => {
+        if (!this.hasAttribute("transparent")) {
+            this.updateBodyMargin();
+        }
+    };
+
+    observeResize() {
+        this.resizeObserver = new ResizeObserver(() => {
             if (!this.hasAttribute("transparent")) {
-                updateBodyMargin();
+                this.updateBodyMargin();
             }
-        };
-
-        const toggleHeaderBg = () => {
-            if (window.scrollY > header.getBoundingClientRect().height) {
-                header.classList.add("scroll");
-            } else {
-                header.classList.remove("scroll");
-            }
-
-            isTransparent();
-        };
-
-        isTransparent();
-
-        const resizeObserver = new ResizeObserver(() => {
-            isTransparent();
         });
-        resizeObserver.observe(header);
+        this.resizeObserver.observe(this.header);
+    }
 
-        window.addEventListener("scroll", toggleHeaderBg);
-        window.addEventListener("resize", isTransparent);
+    handleLogoClick = (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    setupEventListeners() {
+        window.addEventListener("scroll", this.handleScroll);
+        this.logo.addEventListener("click", this.handleLogoClick);
+    }
+
+    cleanupEventListeners() {
+        window.removeEventListener("scroll", this.handleScroll);
+        window.removeEventListener("resize", this.updateBodyMargin.bind(this));
+        this.logo.removeEventListener("click", this.handleLogoClick);
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
+        }
+    }
+
+    disconnectedCallback() {
+        this.cleanupEventListeners();
     }
 }
 

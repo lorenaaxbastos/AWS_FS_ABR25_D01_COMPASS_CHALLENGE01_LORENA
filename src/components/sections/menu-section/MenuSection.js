@@ -5,8 +5,6 @@ class MenuSection extends BaseComponent {
         super(import.meta.url);
     }
     static componentName = "MenuSection";
-
-    setupAttributes() {}
 }
 
 customElements.define("section-menu", MenuSection);

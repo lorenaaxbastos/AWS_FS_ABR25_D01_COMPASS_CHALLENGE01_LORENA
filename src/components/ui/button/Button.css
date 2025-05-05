@@ -18,7 +18,9 @@
 }
 
 .btn:hover,
-.btn:focus-visible {
+.btn:focus-visible,
+:host-context(.menu-card:hover) .btn,
+:host-context(.menu-card:focus-within) .btn {
     color: var(--color-secondary-light-02);
     background-color: var(--color-primary-dark-01);
 }
@@ -74,12 +76,7 @@
 }
 
 :host-context(.header.scroll) .btn:hover,
-:host-context(.header.scroll) .btn:focus-visible {
-    color: var(--color-secondary-light-02);
-    background-color: var(--color-primary-dark-01);
-    box-shadow: 0 0.6rem 1.2rem var(--color-primary-dark-rgba-22);
-}
-
+:host-context(.header.scroll) .btn:focus-visible,
 :host-context(.header:not(.transparent)) .btn:hover,
 :host-context(.header:not(.transparent)) .btn:focus-visible {
     color: var(--color-secondary-light-02);
@@ -89,12 +86,7 @@
 
 @media (max-width: 48em) {
     :host-context(.header.scroll) .btn:hover,
-    :host-context(.header.scroll) .btn:focus-visible {
-        color: var(--color-primary);
-        background-color: var(--color-secondary-light-02);
-        box-shadow: 0 0.3rem 0.6rem var(--color-secondary-rgba-42);
-    }
-
+    :host-context(.header.scroll) .btn:focus-visible,
     :host-context(.header:not(.transparent)) .btn:hover,
     :host-context(.header:not(.transparent)) .btn:focus-visible {
         color: var(--color-primary);

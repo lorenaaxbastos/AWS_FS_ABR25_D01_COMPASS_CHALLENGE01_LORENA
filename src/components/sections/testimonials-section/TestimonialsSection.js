@@ -5,8 +5,6 @@ class TestimonialsSection extends BaseComponent {
         super(import.meta.url);
     }
     static componentName = "TestimonialsSection";
-
-    setupAttributes() {}
 }
 
 customElements.define("section-testimonials", TestimonialsSection);

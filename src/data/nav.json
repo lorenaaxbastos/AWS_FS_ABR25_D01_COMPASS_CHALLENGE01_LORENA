@@ -1,6 +1,6 @@
 [
-    { "path": "/#", "label": "Home" },
-    { "path": "/#about", "label": "About us" },
-    { "path": "/#menu", "label": "Menu" },
-    { "path": "/#testimonials", "label": "Testimonials" }
+    { "path": "/", "label": "Home" },
+    { "path": "#about", "label": "About us" },
+    { "path": "#menu", "label": "Menu" },
+    { "path": "#testimonials", "label": "Testimonials" }
 ]
