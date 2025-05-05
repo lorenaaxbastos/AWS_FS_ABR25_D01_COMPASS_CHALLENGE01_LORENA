@@ -3,34 +3,61 @@ import { loadPartial } from "../../../utils/loader.js";
 import { titleCase } from "../../../utils/format.js";
 
 class Slider extends BaseComponent {
-    constructor() {
-        super(import.meta.url);
-    }
     static componentName = "Slider";
 
+    constructor() {
+        super(import.meta.url);
+        this.currentSlide = 0;
+        this.cardElements = [];
+        this.observers = [];
+        this.handleTouchEnd = this.handleTouchEnd.bind(this);
+        this.handleTouchStart = this.handleTouchStart.bind(this);
+        this.handleTouchMove = this.handleTouchMove.bind(this);
+        this.startX = 0;
+        this.endX = 0;
+        this.THRESHOLD = 50;
+    }
+
     async setupAttributes() {
-        const data = await loadPartial(this.getAttribute("data"));
-        const container = this.shadowRoot.querySelector(".slides");
-        const buttons = this.shadowRoot.querySelectorAll(".slider__btn");
-        const effect = this.getAttribute("effect");
-        const type = this.getAttribute("type");
+        await this.loadData();
+        this.selectElements();
+        this.setAriaLabel();
+        await this.createSlides();
 
-        container.setAttribute(
+        this.setSlidesOpacity();
+        this.goToSlide();
+        this.setupEventListeners();
+    }
+
+    async loadData() {
+        this.data = await loadPartial(this.getAttribute("data"));
+        this.effect = this.getAttribute("effect");
+        this.type = this.getAttribute("type");
+    }
+
+    selectElements() {
+        this.container = this.shadowRoot.querySelector(".slides");
+        this.buttons = this.shadowRoot.querySelectorAll(".slider__btn");
+    }
+
+    setAriaLabel() {
+        const originalLabel = this.container.getAttribute("aria-label");
+        this.container.setAttribute(
             "aria-label",
-            titleCase(`${type} ${container.getAttribute("aria-label")}`)
+            titleCase(`${this.type} ${originalLabel}`)
         );
+    }
 
-        const cardElements = [];
+    recalculateHeight() {
+        const maxHeight = Math.max(
+            ...this.cardElements.map((slide) => slide.clientHeight)
+        );
+        this.container.style.height = `${maxHeight + 55}px`;
+    }
 
-        const recalculateHeight = () => {
-            const maxHeight = Math.max(
-                ...cardElements.map((slide) => slide.clientHeight)
-            );
-            container.style.height = `${maxHeight + 55}px`;
-        };
-
-        if (type === "testimonial") {
-            const promises = data.data.map((feedback) => {
+    async createSlides() {
+        if (this.type === "testimonial") {
+            const promises = this.data.data.map((feedback) => {
                 return new Promise((resolve) => {
                     const slide = document.createElement("ui-testimonial-card");
 
@@ -41,88 +68,138 @@ class Slider extends BaseComponent {
                     slide.setAttribute("tabindex", "-1");
 
                     slide.addEventListener("card-ready", () => {
-                        cardElements.push(slide);
+                        this.cardElements.push(slide);
                         resolve();
                     });
 
-                    container.appendChild(slide);
+                    this.container.appendChild(slide);
                 });
             });
 
             await Promise.all(promises);
-            recalculateHeight();
+            this.recalculateHeight();
         }
 
-        let resizeTimeout;
-        window.addEventListener("resize", () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => recalculateHeight(), 200);
+        this.slides = Array.from(this.container.children);
+        this.slidesMaxIndex = this.slides.length - 1;
+    }
+
+    setSlidesOpacity() {
+        if (this.effect === "fade") {
+            this.slides.forEach((slide) => (slide.style.opacity = 0));
+        }
+    }
+
+    goToSlide() {
+        this.slides.forEach((slide, i) => {
+            if (this.effect === "slide") {
+                slide.style.transform = `translateX(${
+                    (i - this.currentSlide) * 100
+                }%)`;
+            } else if (this.effect === "fade") {
+                this.slides.forEach((other) => (other.style.opacity = 0));
+                slide.classList.toggle("visible", i === this.currentSlide);
+            }
+
+            slide.setAttribute("aria-hidden", i !== this.currentSlide);
         });
 
-        const slides = Array.from(container.children);
+        this.updateButtons();
+    }
 
-        let currentSlide = 0;
+    updateButtons() {
+        this.buttons[0].disabled = this.currentSlide === 0;
+        this.buttons[1].disabled = this.currentSlide === this.slidesMaxIndex;
+    }
 
-        if (effect === "fade") {
-            slides.forEach((slide) => (slide.style.opacity = 0));
+    handleButtonClick = (index) => {
+        if (index === 0 && this.currentSlide > 0) this.currentSlide--;
+        else if (index === 1 && this.currentSlide < this.slidesMaxIndex)
+            this.currentSlide++;
+
+        this.goToSlide();
+    };
+
+    handleKeydown = (event) => {
+        if (event.key === "ArrowLeft" && this.currentSlide > 0) {
+            this.currentSlide--;
+            this.buttons[0].focus();
+        } else if (
+            event.key === "ArrowRight" &&
+            this.currentSlide < this.slidesMaxIndex
+        ) {
+            this.currentSlide++;
+            this.buttons[1].focus();
         }
 
-        const goToSlide = (index, triggerButton) => {
-            slides.forEach((slide, i) => {
-                if (effect === "slide") {
-                    slide.style.transform = `translateX(${(i - index) * 100}%)`;
-                } else if (effect === "fade") {
-                    slide.classList.toggle("active", i === index);
-                }
+        this.goToSlide();
+    };
 
-                slide.setAttribute("aria-hidden", i !== index);
-                if (i === index && this.shadowRoot.activeElement !== null) {
-                    slide.focus();
-                }
-            });
-
-            if (triggerButton) {
-                triggerButton.focus();
-            }
-        };
-
-        const updateButtons = () => {
-            buttons[0].disabled = currentSlide === 0;
-            buttons[1].disabled = currentSlide === slides.length - 1;
-        };
-
-        goToSlide(currentSlide);
-        updateButtons();
-
-        buttons.forEach((button, j) => {
-            button.addEventListener("click", () => {
-                // button.blur();
-
-                const maxIndex = slides.length - 1;
-                if (j === 0 && currentSlide > 0) currentSlide--;
-                if (j === 1 && currentSlide < maxIndex) currentSlide++;
-
-                goToSlide(currentSlide, button);
-                updateButtons();
-            });
+    handleResize() {
+        this.cardElements.forEach((slide) => {
+            const observer = new ResizeObserver(() => this.recalculateHeight());
+            observer.observe(slide);
+            this.observers.push(observer);
         });
+    }
 
-        this.shadowRoot.addEventListener("keydown", (event) => {
-            if (event.key === "ArrowLeft") {
-                if (currentSlide > 0) {
-                    currentSlide--;
-                    goToSlide(currentSlide, buttons[0]);
-                    updateButtons();
-                }
-            }
-            if (event.key === "ArrowRight") {
-                if (currentSlide < slides.length - 1) {
-                    currentSlide++;
-                    goToSlide(currentSlide, buttons[1]);
-                    updateButtons();
-                }
-            }
+    handleTouchStart(event) {
+        this.startX = event.touches[0].clientX;
+    }
+
+    handleTouchMove(event) {
+        this.endX = event.touches[0].clientX;
+    }
+
+    handleTouchEnd() {
+        const deltaX = this.endX - this.startX;
+
+        if (deltaX > this.THRESHOLD && this.currentSlide > 0) {
+            this.currentSlide--;
+        } else if (
+            deltaX < -this.THRESHOLD &&
+            this.currentSlide < this.slidesMaxIndex
+        ) {
+            this.currentSlide++;
+        }
+
+        this.goToSlide();
+    }
+
+    setupEventListeners() {
+        this.handleResize();
+
+        this.buttons.forEach((button, index) => {
+            button.addEventListener("click", () =>
+                this.handleButtonClick(index)
+            );
         });
+        this.shadowRoot.addEventListener("keydown", this.handleKeydown);
+
+        this.container.addEventListener("touchstart", this.handleTouchStart);
+        this.container.addEventListener("touchmove", this.handleTouchMove);
+        this.container.addEventListener("touchend", this.handleTouchEnd);
+    }
+
+    cleanupEventListeners() {
+        if (this.observers) {
+            this.observers.forEach((observer) => observer.disconnect());
+        }
+
+        this.buttons.forEach((button, index) => {
+            button.removeEventListener("click", () =>
+                this.handleButtonClick(index)
+            );
+        });
+        this.shadowRoot.removeEventListener("keydown", this.handleKeydown);
+
+        this.container.removeEventListener("touchstart", this.handleTouchStart);
+        this.container.removeEventListener("touchmove", this.handleTouchMove);
+        this.container.removeEventListener("touchend", this.handleTouchEnd);
+    }
+
+    disconnectedCallback() {
+        this.cleanupEventListeners();
     }
 }
 

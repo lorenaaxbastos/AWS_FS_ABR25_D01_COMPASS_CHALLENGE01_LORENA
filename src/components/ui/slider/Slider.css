@@ -74,7 +74,7 @@
     transition: var(--transition-default);
 }
 
-.slides > *.active {
+.slides > *.visible {
     opacity: 1 !important;
 }
 
