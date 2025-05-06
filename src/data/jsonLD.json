@@ -1,0 +1,57 @@
+{
+    "@context": "http://schema.org",
+    "@type": "CoffeeShop",
+    "url": "https://www.beanscene.com",
+    "name": "Bean Scene Coffee Shop",
+    "slogan": "We've got your morning covered with coffee",
+    "description": "Bean Scene is a coffee shop that provides high-quality coffee to boost your productivity and enhance your mood. Start your day with the best coffee you will ever taste. Discover our range of refreshing beverages, including Cold Brews, Lattes, and more.",
+    "image": "https://www.beanscene.com/src/imgs/default-product.webp",
+    "servesCuisine": "Coffee, Bakery, Snacks",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Akshya Nagar 1st Block 1st Cross, Rammurthy Nagar",
+        "addressLocality": "Bangalore",
+        "postalCode": "560016",
+        "addressCountry": "IN"
+    },
+    "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1 202-918-2132",
+        "contactType": "Customer Service",
+        "areaServed": "IN",
+        "availableLanguage": "English"
+    },
+    "mainEntityOfPage": "https://www.beanscene.com",
+
+    "datePublished": "2025-05-05",
+    "dateModified": "2025-05-06",
+    "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://www.beanscene.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "About us",
+                "item": "https://www.beanscene.com/#about"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Menu",
+                "item": "https://www.beanscene.com/#menu"
+            },
+            {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "Testimonials",
+                "item": "https://www.beanscene.com/#testimonials"
+            }
+        ]
+    }
+}
