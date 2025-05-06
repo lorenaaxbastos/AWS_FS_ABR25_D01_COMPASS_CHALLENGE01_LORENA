@@ -143,7 +143,3 @@ Aspiring Senior Developer
 _Passionate about clean code, innovation, and best practices._
 
 **LinkedIn:** [linkedin.com/in/lorenaaxbastos](https://www.linkedin.com/in/lorenaaxbastos/)
-
-## 📃 License
-
-MIT License
