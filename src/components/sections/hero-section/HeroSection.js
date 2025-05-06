@@ -1,10 +1,10 @@
-import { BaseComponent } from "../../BaseComponent.js";
+import { BaseSection } from "../../BaseSection.js";
 
-class HeroSection extends BaseComponent {
+class HeroSection extends BaseSection {
     constructor() {
         super(import.meta.url);
     }
-    static componentName = "HeroSection";
+    static sectionName = "HeroSection";
 }
 
 customElements.define("section-hero", HeroSection);

@@ -1,6 +1,6 @@
 import { BaseComponent } from "../../BaseComponent.js";
 import { loadPartial } from "../../../utils/loader.js";
-import { priceFormatBR, titleCase } from "../../../utils/format.js";
+import { priceFormatUS, titleCase } from "../../../utils/format.js";
 
 class MenuTable extends BaseComponent {
     static componentName = "MenuTable";
@@ -60,7 +60,7 @@ class MenuTable extends BaseComponent {
 
             const processedProduct = this.columns.reduce((acc, key) => {
                 let value = product[key];
-                if (key === "price") value = priceFormatBR(value);
+                if (key === "price") value = priceFormatUS(value);
                 if (key === "type" && value == null) value = "";
                 acc[key] = value;
                 return acc;

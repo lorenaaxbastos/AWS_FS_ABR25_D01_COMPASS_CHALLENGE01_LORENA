@@ -1,6 +1,6 @@
 import { BaseComponent } from "../../BaseComponent.js";
 import { loadPartial } from "../../../utils/loader.js";
-import { priceFormatBR } from "../../../utils/format.js";
+import { priceFormatUS } from "../../../utils/format.js";
 
 class MenuCards extends BaseComponent {
     constructor() {
@@ -51,14 +51,18 @@ class MenuCards extends BaseComponent {
             "product-ingredients",
             this.formatIngredients(ingredients_ratio) || short_description
         );
-        menuCard.setAttribute("product-price", priceFormatBR(price));
+        menuCard.setAttribute("product-price", price);
         menuCard.setAttribute("product-url", order_url);
         return menuCard;
     }
 
     populateMenuCards(products) {
         products.forEach((product) => {
-            if (product.name && product.price && product.order_url) {
+            if (
+                product.name &&
+                priceFormatUS(product.price) &&
+                product.order_url
+            ) {
                 const menuCard = this.createMenuCard(product);
                 this.container.appendChild(menuCard);
             }

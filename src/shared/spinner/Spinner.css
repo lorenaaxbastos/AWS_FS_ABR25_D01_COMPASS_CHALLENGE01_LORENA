@@ -1,26 +1,23 @@
-/* REVIEW - Basic style */
 .spinner {
-    opacity: 0;
-    visibility: hidden;
+    opacity: 1;
+    visibility: visible;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #3498db;
+    border: 6px solid var(--color-secondary-light-01);
+    border-top: 6px solid var(--color-secondary-dark);
     border-radius: 50%;
     width: 40px;
     height: 40px;
     animation: spin 0.5s linear infinite;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+    z-index: 999999;
 }
 
-.spinner.visible {
-    visibility: visible;
-}
-
-.spinner.active {
-    opacity: 1;
+.spinner.spinner-hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 
 @keyframes spin {

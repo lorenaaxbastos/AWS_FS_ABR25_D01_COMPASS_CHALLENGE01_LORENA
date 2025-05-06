@@ -1,5 +1,5 @@
 import { BaseComponent } from "../../BaseComponent.js";
-import { priceFormatBR, titleCase } from "../../../utils/format.js";
+import { priceFormatUS, titleCase } from "../../../utils/format.js";
 
 class MenuCard extends BaseComponent {
     static componentName = "MenuCard";
@@ -34,7 +34,7 @@ class MenuCard extends BaseComponent {
                 key === "name"
                     ? titleCase(value)
                     : key === "price"
-                    ? priceFormatBR(value)
+                    ? priceFormatUS(value)
                     : value;
         });
 

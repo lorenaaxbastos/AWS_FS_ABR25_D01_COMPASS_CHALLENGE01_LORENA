@@ -1,18 +1,19 @@
-const spinner = document.querySelector(".spinner");
+export const hideSpinner = (component) => {
+    const section = component.closest("section");
 
-export const showSpinner = () => {
-    spinner.classList.add("visible");
-    setTimeout(() => {
-        spinner.classList.add("active");
-    }, 10);
-};
+    if (section) {
+        const spinner = section.querySelector(".spinner");
 
-export const hideSpinner = () => {
-    const onTransitionEnd = () => {
-        spinner.classList.remove("visible");
-        spinner.removeEventListener("transitionend", onTransitionEnd);
-    };
+        if (spinner) {
+            setTimeout(() => {
+                spinner.classList.add("spinner-hidden");
 
-    spinner.classList.remove("active");
-    spinner.addEventListener("transitionend", onTransitionEnd);
+                spinner.offsetHeight;
+
+                setTimeout(() => {
+                    spinner.remove();
+                }, 300);
+            }, 1000);
+        }
+    }
 };
