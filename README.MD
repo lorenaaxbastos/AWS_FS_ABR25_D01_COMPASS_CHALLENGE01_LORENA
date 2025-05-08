@@ -40,9 +40,7 @@ No external dependencies are required!
 git clone https://github.com/lorenaaxbastos/AWS_FS_ABR25_D01_COMPASS_CHALLENGE01_LORENA.git
 ```
 
-2. Open the index.html file directly in your browser.
-
-Alternatively, if you use a local server (recommended for testing):
+2. Open the project using a local server:
 
 ```bash
 # If you have live-server installed
